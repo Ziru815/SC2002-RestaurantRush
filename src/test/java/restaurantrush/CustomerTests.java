@@ -1,7 +1,5 @@
 package restaurantrush;
 
-import java.lang.reflect.Field;
-
 /** Focused Stage 1 checks for owner A's customer and menu behavior. */
 public final class CustomerTests {
     private static int passed;
@@ -92,7 +90,8 @@ public final class CustomerTests {
         check(customer.getState() == CustomerState.SEATED && customer.getServedTurn() == -1,
                 "failed service must not mutate the customer");
 
-        setOrderStatus(customer.getOrder(), OrderStatus.SERVED);
+        customer.getOrder().advance(2);
+        customer.getOrder().markServed();
         customer.markServed(3);
         check(customer.getState() == CustomerState.SERVED && customer.getServedTurn() == 3,
                 "a served order must move the customer to SERVED and record the turn");
@@ -118,7 +117,7 @@ public final class CustomerTests {
         customer.finishEating(4);
         Order order = customer.getOrder();
         expect(IllegalStateException.class, customer::markPaid);
-        setOrderStatus(order, OrderStatus.PAID);
+        order.markPaid();
         customer.markPaid();
         check(customer.getState() == CustomerState.PAID, "payment must move the customer to PAID");
         check(customer.getTable() == null, "payment must clear the customer-side table reference");
@@ -130,7 +129,8 @@ public final class CustomerTests {
         Customer customer = customerWithPlacedOrder(1);
         customer.loseWaitingSatisfaction();
         check(customer.getSatisfaction() == 92, "the seated customer must lose satisfaction before service");
-        setOrderStatus(customer.getOrder(), OrderStatus.SERVED);
+        customer.getOrder().advance(2);
+        customer.getOrder().markServed();
         customer.markServed(3);
         customer.loseWaitingSatisfaction();
         check(customer.getSatisfaction() == 92, "a served customer must stop losing satisfaction");
@@ -162,19 +162,15 @@ public final class CustomerTests {
 
     private static Customer servedCustomer(int id, int turn) {
         Customer customer = customerWithPlacedOrder(id);
-        setOrderStatus(customer.getOrder(), OrderStatus.SERVED);
+        Order order = customer.getOrder();
+        int firstPreparationTurn = Math.max(1, turn - order.getItem().getPrepUnits());
+        for (int unit = 0; unit < order.getItem().getPrepUnits(); unit++) {
+            order.advance(firstPreparationTurn + unit);
+        }
+        check(order.isServable(turn), "the test order must be ready before its service turn");
+        order.markServed();
         customer.markServed(turn);
         return customer;
-    }
-
-    private static void setOrderStatus(Order order, OrderStatus status) {
-        try {
-            Field field = Order.class.getDeclaredField("status");
-            field.setAccessible(true);
-            field.set(order, status);
-        } catch (ReflectiveOperationException error) {
-            throw new AssertionError("Unable to establish the Order test precondition", error);
-        }
     }
 
     private static void check(boolean condition, String message) {
