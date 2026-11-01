@@ -28,52 +28,85 @@ public abstract class Customer {
     public abstract int waitingLoss();
 
     public void loseWaitingSatisfaction() {
-        // TODO[A]: Only QUEUED/SEATED lose waitingLoss(); clamp to 0. D handles departure.
-        throw new UnsupportedOperationException("TODO[A] Customer.loseWaitingSatisfaction");
+        if (state == CustomerState.QUEUED || state == CustomerState.SEATED) {
+            satisfaction = Math.max(0, satisfaction - waitingLoss());
+        }
     }
 
     public MenuItem chooseMeal(Menu menu) {
-        // TODO[A]: Customer chooses using ID cycle 1=Salad, 2=Burger, 3=Pasta, repeat.
-        // The manager must never choose the dish. This rule needs no random seed.
-        throw new UnsupportedOperationException("TODO[A] Customer.chooseMeal");
+        if (menu == null) {
+            throw new IllegalArgumentException("Menu is required.");
+        }
+        String itemName = switch ((id - 1) % 3) {
+            case 0 -> "Salad";
+            case 1 -> "Burger";
+            default -> "Pasta";
+        };
+        return menu.find(itemName);
     }
 
     public void seat(Table table) {
-        // TODO[A]: Require QUEUED and set the customer-side table reference and SEATED.
-        // C validates and links both sides, then D removes this customer from the queue.
-        throw new UnsupportedOperationException("TODO[A] Customer.seat");
+        if (table == null) {
+            throw new IllegalArgumentException("Table is required.");
+        }
+        if (state != CustomerState.QUEUED || this.table != null) {
+            throw new IllegalStateException("Customer " + id + " is not waiting to be seated.");
+        }
+        this.table = table;
+        state = CustomerState.SEATED;
     }
 
     public void placeOrder(Order order) {
-        // TODO[A]: Require SEATED, no existing order, and order.getCustomer() == this.
-        throw new UnsupportedOperationException("TODO[A] Customer.placeOrder");
+        if (order == null) {
+            throw new IllegalArgumentException("Order is required.");
+        }
+        if (state != CustomerState.SEATED) {
+            throw new IllegalStateException("Customer " + id + " is not seated.");
+        }
+        if (this.order != null) {
+            throw new IllegalStateException("Customer " + id + " already has an order.");
+        }
+        if (order.getCustomer() != this) {
+            throw new IllegalArgumentException("The order belongs to another customer.");
+        }
+        this.order = order;
     }
 
     public void markServed(int turn) {
-        // TODO[A]: Require an attached SERVED order, then record state and servedTurn.
-        throw new UnsupportedOperationException("TODO[A] Customer.markServed");
+        if (turn < 1) {
+            throw new IllegalArgumentException("Service turn must be positive.");
+        }
+        if (state != CustomerState.SEATED || order == null || order.getStatus() != OrderStatus.SERVED) {
+            throw new IllegalStateException("Customer " + id + " does not have a served order.");
+        }
+        state = CustomerState.SERVED;
+        servedTurn = turn;
     }
 
     public void finishEating(int turn) {
-        // TODO[A]: If SERVED and turn > servedTurn, become READY_TO_PAY and record turn.
-        // For other states or same-turn service this is a no-op.
-        throw new UnsupportedOperationException("TODO[A] Customer.finishEating");
+        if (state == CustomerState.SERVED && turn > servedTurn) {
+            state = CustomerState.READY_TO_PAY;
+            readyToPayTurn = turn;
+        }
     }
 
     public boolean canPay(int turn) {
-        // TODO[A]: state == READY_TO_PAY and turn > readyToPayTurn.
-        throw new UnsupportedOperationException("TODO[A] Customer.canPay");
+        return state == CustomerState.READY_TO_PAY && turn > readyToPayTurn;
     }
 
     public void markPaid() {
-        // TODO[A]: Require READY_TO_PAY and a PAID order; set PAID and clear table ref.
-        // Cashier retains the old Table reference and releases its occupant.
-        throw new UnsupportedOperationException("TODO[A] Customer.markPaid");
+        if (state != CustomerState.READY_TO_PAY || order == null || order.getStatus() != OrderStatus.PAID) {
+            throw new IllegalStateException("Customer " + id + " is not ready with a paid order.");
+        }
+        state = CustomerState.PAID;
+        table = null;
     }
 
     public void leave() {
-        // TODO[A]: Only an unserved QUEUED/SEATED customer at satisfaction 0 may leave.
-        // Set LEFT and clear table reference. D cancels order and releases old table.
-        throw new UnsupportedOperationException("TODO[A] Customer.leave");
+        if ((state != CustomerState.QUEUED && state != CustomerState.SEATED) || satisfaction != 0) {
+            throw new IllegalStateException("Only an unserved waiting customer at satisfaction 0 may leave.");
+        }
+        state = CustomerState.LEFT;
+        table = null;
     }
 }
