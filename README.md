@@ -1,52 +1,56 @@
 # SC2002 Restaurant Rush
 
-Stage 1 **skeleton**, prepared for a four-person group. Java 17, command line, no third-party libraries or network access required at runtime.
+Java 17+ command-line restaurant game. No third-party libraries or network access are needed at runtime.
 
-**Current status:** compiles and launches an integrated preview. The actual turn simulation is not implemented. `start` reports the controller TODO without advancing time or producing a game result. This is not the finished `stage-1` submission.
+## Current status
 
-## Quick start
+- **Stage 1 runnable baseline:** tag [`stage-1`](https://github.com/Ziru815/SC2002-RestaurantRush/releases/tag/stage-1), commit `8d7fa09ddae3053f97f9a7ebe9738f3335740133`, after PR #7. Four suites passed 40/40; a victory and defeat were replayed for all 18 turns. See [saved evidence](docs/evidence/stage1/README.md).
+- **This branch: Stage 2 scaffold only.** The default game still runs Stage 1. VIP/Critic behavior, pricing integration and mixed arrivals are intentionally TODO; `--stage2` is not enabled yet. Stage 2 tests must report pending/failure until the owners implement them.
+- **Stage 3:** not started. Do not mix Host, ComboMeal or Happy Hour into Stage 2.
 
-Install a JDK 17 or newer. On macOS/Linux, open Terminal in this project folder:
+## Build and play
 
 ```sh
 sh scripts/run.sh
-```
-
-Try `menu`, `status`, `tasks`, `help`, then `quit`. Use `sh scripts/run.sh --check` for a non-interactive wiring check.
-
-```sh
+# Enter start, then choose Waiter and Chef actions each turn.
+sh scripts/run.sh --check
 sh scripts/test.sh
 ```
 
-This runs scaffold smoke tests, not the completed-game acceptance tests. No Maven/Gradle setup is needed. The scripts also support runtimes with the compiler module but no separate `javac` executable.
+`test.sh` compiles all main/test sources with Java 17, `-Xlint:all -Werror`, and runs the four existing suites plus five scaffold extension checks. A green result certifies those checks, not Stage 2 completion.
 
-In IntelliJ IDEA or VS Code, use JDK 17, mark `src/main/java` as the source root, and run `restaurantrush.Main`. Test source root: `src/test/java`. On Windows, an IDE is the easiest option; alternatively run the shell scripts in Git Bash with a JDK installed.
+```sh
+sh scripts/test-stage2.sh
+```
 
-## Start here
+This also runs four owner-specific Stage 2 suites. They deliberately fail as pending in the scaffold. Each owner replaces their suite placeholder with meaningful tests. Once Stage 2 is ready, D must include these suites in the normal test command without introducing script recursion.
 
-- [四人分工与接口约定 / Team guide](docs/TEAM_GUIDE.md)
-- [完成情况与待做事项 / Implementation status](docs/IMPLEMENTATION_STATUS.md)
-- [Stage 1 acceptance checklist](docs/STAGE1_ACCEPTANCE.md)
-- [Class diagram source](docs/class-diagram-stage1.mmd)
+For IDE use, set JDK 17+, main source root `src/main/java`, test root `src/test/java`, entry `restaurantrush.Main`. On Windows use an IDE or Git Bash.
 
-All Java classes use the package `restaurantrush`. Search for `TODO[A]`, `TODO[B]`, `TODO[C]` or `TODO[D]` to find your work. Unfinished business methods deliberately throw `UnsupportedOperationException`; do not replace them with dummy values or empty bodies just to make a test green.
+## Team starting points
 
-## Base setting to preserve
+- [Stage 2 four-person guide and exact contracts](docs/STAGE2_TEAM_GUIDE.md)
+- [Stage 2 acceptance checklist](docs/STAGE2_ACCEPTANCE.md)
+- [Current implementation status](docs/IMPLEMENTATION_STATUS.md)
+- [Submission checklist and responsibilities](docs/SUBMISSION_CHECKLIST.md)
+- [English group message to copy](docs/STAGE2_GROUP_MESSAGE.txt)
 
-18 full turns, two tables, one Waiter/Chef/Cashier. Six arrivals on turns 1, 4, 7, 10, 13 and 16. Salad $9.00 / 1 preparation unit, Burger $15.00 / 1, Pasta $18.00 / 2. Regular waiting loss is 8, starting from 100 and clamped at 0. Customer food choice will cycle by ID: Salad, Burger, Pasta, repeat. The manager controls priorities, not food choice.
+Find work with `rg 'TODO\[[ABCD]-S2\]' src` or your IDE's search. Keep the single normal `src/` tree. No nested ZIP uploads, fake authorship or fabricated student contributions.
 
-Victory is checked only after turn 18 and requires all three: at least four paid customers, paid revenue at least $45.00, and average satisfaction recorded on payment at least 60. The payment flow and timing are not implemented yet; see the checklist before claiming compliance.
+## Rules retained from Stage 1
 
-## Repository and stage evidence
+18 turns; two tables; one Waiter, Chef and Cashier. Arrivals at 1/4/7/10/13/16. Salad 900 cents / 1 unit, Burger 1500 / 1, Pasta 1800 / 2. Regular loss 8. Regular food choice cycles by ID: Salad, Burger, Pasta. All three targets must hold after turn 18: paid >=4, revenue >=4500 cents, mean satisfaction at payment >=60.
+
+## Stage evidence
 
 Repository: https://github.com/Ziru815/SC2002-RestaurantRush
 
-Work on feature branches, run tests and merge reviewed changes. Once the complete Stage 1 rules and reproducible victory/defeat runs are verified, tag that runnable commit `stage-1`. Do not tag this scaffold as the completed stage. The remaining course work also includes a report, final Stage 3 class diagram, sequence diagram, recorded video and course declarations.
-
-| Transition | Current evidence |
+| Stage/transition | Evidence |
 | --- | --- |
-| Stage 1 | Skeleton only; no completion tag or victory/defeat run yet |
-| 1 → 2 | Not started. Later record new/changed/deleted files, reasons and compare link |
-| 2 → 3 | Not started. Later record new/changed/deleted files, reasons and compare link |
+| Stage 1 | Fixed `stage-1` tag; replay inputs and results in docs/evidence/stage1 |
+| 1 -> 2 | Preparation only. Customer extension methods + subtype/factory stubs + owned test entry points + docs. Order and controller behavior unchanged. [Working comparison](https://github.com/Ziru815/SC2002-RestaurantRush/compare/stage-1...work/stage2-scaffold). D records final added/changed/deleted files and reasons once implemented. |
+| 2 -> 3 | Pending; retain Stage 2 before adding Stage 3 features. |
 
-This initial scaffold was prepared with GAI assistance. All members should review, implement and understand their own contributions, and complete the required course declarations accurately. No test results or development history should be presented as student work that has not occurred.
+The old README at the immutable Stage 1 tag still says skeleton; these current notes correct that stale description without moving the tag. A final report and accurate diagrams remain separate deliverables.
+
+Scaffold and verification were prepared with AI assistance at Ziru's request. Each member must understand, test and explain their own changes, record actual assistance, retain full required AI histories and complete the course declarations. The scaffold is not four members' completed implementations.

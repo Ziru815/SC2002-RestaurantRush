@@ -27,6 +27,17 @@ public abstract class Customer {
 
     public abstract int waitingLoss();
 
+    /** Stage 2 extension contract: quote in cents; Order locks it when created. */
+    public int priceFor(MenuItem item) {
+        if (item == null) {
+            throw new IllegalArgumentException("Menu item is required.");
+        }
+        return item.getPriceCents();
+    }
+
+    /** Display metadata only. Game rules must dispatch through behavior methods. */
+    public String getTypeLabel() { return "Regular"; }
+
     public void loseWaitingSatisfaction() {
         if (state == CustomerState.QUEUED || state == CustomerState.SEATED) {
             satisfaction = Math.max(0, satisfaction - waitingLoss());

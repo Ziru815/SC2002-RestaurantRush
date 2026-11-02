@@ -14,6 +14,8 @@ public final class Order {
     public Order(Customer customer, MenuItem item) {
         this.customer = Objects.requireNonNull(customer, "customer");
         this.item = Objects.requireNonNull(item, "item");
+        // TODO[B-S2]: lock customer.priceFor(item) exactly once after validation.
+        // Keep the full-price Stage 1 behavior until the pricing PR is implemented.
         this.lockedPriceCents = item.getPriceCents();
     }
 

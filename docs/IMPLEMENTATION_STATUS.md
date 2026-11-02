@@ -1,26 +1,19 @@
-# Implementation Status
+# Implementation status — 3 November 2026
 
-## Implemented in the scaffold
-- Java entry point, package structure and scripts; no external runtime dependencies.
-- Fixed base configuration and immutable menu values in cents.
-- Entity constructors, private state and read-only collection snapshots.
-- Staff availability, deliberate skip and per-turn reset helpers.
-- Integrated ConsoleUI → GameController → Restaurant preview.
-- Status/menu/tasks/help, blank/unknown input recovery, EOF and quit.
-- Explicit exceptions from pending business methods, before any state mutation.
-- Nine runtime smoke scenarios for the above boundaries.
+## Preserved Stage 1
+Tag `stage-1` -> `8d7fa09ddae3053f97f9a7ebe9738f3335740133` (PR #7 merge). Regular customer, orders/tables, employees and 18-turn controller are implemented. The four suites passed 40/40; saved victory/defeat evidence is in `evidence/stage1/`.
 
-## Still required for completed Stage 1
-- All TODO[A/B/C/D] business methods and actual gameplay input.
-- Exactly 18 turns, scheduled arrivals and staff ordering.
-- Seating, customer food selection, order registration and preparation.
-- Ready-to-serve timing, eating, oldest-eligible automatic payment.
-- Satisfaction loss, cancellation, abandonment and table cleanup.
-- Final AND-based victory calculation and full reporting.
-- Real gameplay tests, one reproducible victory run and one reproducible defeat run.
-- A reviewed runnable commit tagged stage-1.
+The historical checklist includes additional manual checks not all independently signed off. Do not turn all boxes green merely because the automated suites pass. Stage 1 diagrams still need the team's match-to-code review.
 
-## Known development boundary
-The preview intentionally stays at turn 0 with an empty restaurant. It is not an example of turn 1, which must include an arrival after gameplay is implemented. `start` is blocked at GameController.processTurn; replacing that exception is not enough to complete the turn. Implement and integrate the named helper methods as well.
+## Stage 2 scaffold
+| Owner | Supplied now | Still required |
+| --- | --- | --- |
+| A / Ziru | Customer default quote/type-label hooks; VIP/Critic declarations and TODO methods | loss 5/12, VIP quote, Critic preference, customer tests |
+| B | Order integration marker; Stage2OrderTests placeholder | lock polymorphic quote; price/immutability tests |
+| C | Existing generic employee flow; cashier reminder; Stage2StaffTests placeholder | real mixed-customer employee/timing/error tests; fix defects only if demonstrated |
+| D / Tianren | Stage2Arrivals declaration; integration markers; Stage2ControllerTests placeholder | fixed arrival setup, --stage2 wiring, type display, integration tests and stage evidence |
 
-The smoke suite checks the current scaffold contract. It must evolve with real gameplay. Passing it does not demonstrate the course's Stage 1 rules. No Stage 2 or Stage 3 feature is present.
+`sh scripts/test.sh` = existing 40 tests plus 5 extension checks. `sh scripts/test-stage2.sh` = pending/failing until the four members implement real tests and features. No Stage 2 completion tag exists at scaffold creation.
+
+## Stage 3 / submission
+Host, ComboMeal, Happy Hour, final stage comparisons, three verified class diagrams, one Stage 2/3 sequence diagram, report with individual reflections, video, full AI histories and declarations remain to be completed.

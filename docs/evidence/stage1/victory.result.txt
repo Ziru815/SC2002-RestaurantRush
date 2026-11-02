@@ -1,0 +1,7 @@
+
+===== Game over =====
+Turns used: 18
+Served: 5 | Paid: 5 | Unhappy departures: 0
+Revenue: $66.00
+Average satisfaction of paid customers: 79.2
+VICTORY

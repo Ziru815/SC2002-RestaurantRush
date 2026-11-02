@@ -73,6 +73,9 @@ public final class GameController {
         ui.showResult(restaurant, checkVictory());
     }
 
+    // TODO[D-S2]: support a configured arrival factory while preserving this
+    // class's existing constructor and default Regular-only regression path.
+    // Stage2Arrivals::create belongs in setup; no instanceof dispatch in game rules.
     private void processArrivals() {
         if (GameConfig.ARRIVAL_TURNS.contains(restaurant.getTurn())) {
             int id = restaurant.getCustomers().size() + 1;
