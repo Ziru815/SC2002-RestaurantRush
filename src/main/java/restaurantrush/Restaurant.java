@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 
-/** Owner D. Owns state; turn 0 deliberately means this scaffold has not started. */
+/** Owner D. Owns state; turn 0 deliberately means the game has not started. */
 public final class Restaurant {
     private final List<Table> tables = List.of(new Table(1), new Table(2));
     private final Queue<Customer> waitingQueue = new ArrayDeque<>();
@@ -37,42 +37,92 @@ public final class Restaurant {
 
     public Customer findQueuedCustomer(int id) {
         return waitingQueue.stream().filter(customer -> customer.getId() == id).findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Customer is not queued: " + id));
+                .orElseThrow(() -> new IllegalArgumentException("Customer " + id + " is not in the waiting queue."));
+    }
+
+    /** Any customer who has arrived, whatever their state; the staff check the state themselves. */
+    public Customer findCustomer(int id) {
+        return customers.stream().filter(customer -> customer.getId() == id).findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("There is no customer " + id + "."));
+    }
+
+    public Table findTable(int number) {
+        return tables.stream().filter(table -> table.getNumber() == number).findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("There is no table " + number + "."));
+    }
+
+    /** The order the customer has placed, if any. */
+    public Order getOrder(int customerId) {
+        Order order = findCustomer(customerId).getOrder();
+        if (order == null) {
+            throw new IllegalArgumentException("Customer " + customerId + " has no order.");
+        }
+        return order;
     }
 
     public void nextTurn() {
-        // TODO[D]: Increment at turn start only; reject advancing beyond 18.
-        throw new UnsupportedOperationException("TODO[D] Restaurant.nextTurn");
+        if (turn >= GameConfig.MAX_TURNS) {
+            throw new IllegalStateException("All " + GameConfig.MAX_TURNS + " turns have been played.");
+        }
+        turn++;
     }
 
     public void addArrival(Customer customer) {
-        // TODO[D]: Reject duplicate ID/non-QUEUED customer, add to registry and queue.
-        throw new UnsupportedOperationException("TODO[D] Restaurant.addArrival");
+        if (customer == null) {
+            throw new IllegalArgumentException("Arriving customer is missing.");
+        }
+        if (customer.getState() != CustomerState.QUEUED) {
+            throw new IllegalArgumentException("An arriving customer must be QUEUED.");
+        }
+        if (customers.stream().anyMatch(known -> known.getId() == customer.getId())) {
+            throw new IllegalArgumentException("Customer " + customer.getId() + " has already arrived.");
+        }
+        customers.add(customer);
+        waitingQueue.add(customer);
     }
 
     public void removeFromQueue(Customer customer) {
-        // TODO[D]: Remove the successfully seated or abandoned customer, not another one.
-        throw new UnsupportedOperationException("TODO[D] Restaurant.removeFromQueue");
+        if (!waitingQueue.remove(customer)) {
+            throw new IllegalArgumentException("Customer " + (customer == null ? "?" : customer.getId()) + " is not in the queue.");
+        }
     }
 
     public void addOrder(Order order) {
-        // TODO[D]: Register once after successful Waiter.takeOrder.
-        throw new UnsupportedOperationException("TODO[D] Restaurant.addOrder");
+        if (order == null || activeOrders.contains(order)) {
+            throw new IllegalArgumentException("That order is missing or already registered.");
+        }
+        activeOrders.add(order);
     }
 
     public void removeOrder(Order order) {
-        // TODO[D]: Remove after PAID or CANCELLED; preserve customer's order history.
-        throw new UnsupportedOperationException("TODO[D] Restaurant.removeOrder");
+        if (!activeOrders.remove(order)) {
+            throw new IllegalArgumentException("That order is not active.");
+        }
     }
 
     public void recordServed() {
-        // TODO[D]: Increment only following successful service, never on preparation.
-        throw new UnsupportedOperationException("TODO[D] Restaurant.recordServed");
+        servedCount++;
     }
 
     public void handleDeparture(Customer customer) {
-        // TODO[D]: Validate waiting state/satisfaction 0; retain old table; cancel any
-        // unfinished order; customer.leave(); release table/remove queue; increment once.
-        throw new UnsupportedOperationException("TODO[D] Restaurant.handleDeparture");
+        if (customer == null || !customers.contains(customer)) {
+            throw new IllegalArgumentException("Unknown customer.");
+        }
+        boolean waiting = customer.getState() == CustomerState.QUEUED || customer.getState() == CustomerState.SEATED;
+        if (!waiting || customer.getSatisfaction() != 0) {
+            throw new IllegalStateException("Only a waiting customer at satisfaction 0 can leave unhappy.");
+        }
+        Table oldTable = customer.getTable();
+        Order order = customer.getOrder();
+        if (order != null) {
+            order.cancel();
+            activeOrders.remove(order);
+        }
+        customer.leave();
+        if (oldTable != null) {
+            oldTable.release();
+        }
+        waitingQueue.remove(customer);
+        unhappyDepartures++;
     }
 }
