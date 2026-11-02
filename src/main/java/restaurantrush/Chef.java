@@ -4,7 +4,12 @@ package restaurantrush;
 public final class Chef extends Staff {
     public void advance(Order order, int turn) {
         requireAvailable();
-        // TODO[C]: Validate order, call order.advance(turn), then markActed.
-        throw new UnsupportedOperationException("TODO[C] Chef.advance");
+        if (order == null) {
+            throw new IllegalArgumentException("Order is required.");
+        }
+
+        // Order owns preparation progress and the READY/ready-turn transition.
+        order.advance(turn);
+        markActed();
     }
 }
