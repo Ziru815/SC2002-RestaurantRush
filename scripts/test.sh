@@ -9,4 +9,6 @@ if command -v javac >/dev/null 2>&1; then
 else
     java -m jdk.compiler/com.sun.tools.javac.Main --release 17 -encoding UTF-8 -Xlint:all -Werror -cp out/main -d out/test @out/test-sources.txt
 fi
-java -cp out/main:out/test restaurantrush.SkeletonSmokeTest
+for suite in SkeletonSmokeTest CustomerTests OrderTableTests ControllerTests; do
+    java -cp out/main:out/test "restaurantrush.$suite"
+done
