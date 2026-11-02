@@ -18,11 +18,11 @@ public final class SkeletonSmokeTest {
         testEndOfInputExits();
         testCollectionsProtectRestaurantState();
         testStaffSkipAndReset();
-        testPendingActionsDoNotConsumeStaffTask();
+        testOccupiedTableDoesNotConsumeStaffTask();
         testMenuLookupAndValidation();
         testPendingOrderDoesNotSilentlyProgress();
         System.out.println("PASS " + passed + "/9 scaffold smoke scenarios");
-        System.out.println("Stage 1 gameplay acceptance: NOT RUN (business methods are TODOs).");
+        System.out.println("Stage 1 gameplay acceptance: NOT RUN by this smoke test.");
     }
 
     private static void testPreviewShowsBaseSetup() {
@@ -73,13 +73,27 @@ public final class SkeletonSmokeTest {
         passed++;
     }
 
-    private static void testPendingActionsDoNotConsumeStaffTask() {
+    private static void testOccupiedTableDoesNotConsumeStaffTask() {
         Waiter waiter = new Waiter();
         Table table = new Table(1);
-        Customer customer = new RegularCustomer(1);
-        expect(UnsupportedOperationException.class, () -> waiter.seat(customer, table));
-        check(!waiter.hasActed() && table.isFree() && customer.getState() == CustomerState.QUEUED,
-                "unfinished seat silently consumed task or mutated state");
+        Customer occupant = new RegularCustomer(1);
+        waiter.seat(occupant, table);
+        waiter.resetTurn();
+
+        Customer customer = new RegularCustomer(2);
+        expect(IllegalStateException.class, () -> waiter.seat(customer, table));
+        check(!waiter.hasActed(), "seating at an occupied table must not use the task");
+        check(!table.isFree() && table.getOccupant() == occupant
+                && occupant.getTable() == table && occupant.getState() == CustomerState.SEATED,
+                "rejected seating must preserve the existing occupant");
+        check(customer.getState() == CustomerState.QUEUED && customer.getTable() == null,
+                "rejected seating must leave the waiting customer unchanged");
+
+        Table freeTable = new Table(2);
+        waiter.seat(customer, freeTable);
+        check(waiter.hasActed() && freeTable.getOccupant() == customer
+                && customer.getTable() == freeTable && customer.getState() == CustomerState.SEATED,
+                "the task must remain available for a valid seating retry");
         passed++;
     }
 

@@ -4,22 +4,59 @@ package restaurantrush;
 public final class Waiter extends Staff {
     public void seat(Customer customer, Table table) {
         requireAvailable();
-        // TODO[C]: Validate both objects. Table.seat(customer), Customer.seat(table).
-        // D removes queued customer only after this succeeds.
-        throw new UnsupportedOperationException("TODO[C] Waiter.seat");
+        if (customer == null || table == null) {
+            throw new IllegalArgumentException("Customer and table are required.");
+        }
+        if (customer.getState() != CustomerState.QUEUED || customer.getTable() != null) {
+            throw new IllegalStateException("Customer is not available for seating.");
+        }
+        if (!table.isFree()) {
+            throw new IllegalStateException("Table is occupied.");
+        }
+
+        table.seat(customer);
+        customer.seat(table);
+        markActed();
     }
 
     public Order takeOrder(Customer customer, Menu menu) {
         requireAvailable();
-        // TODO[C]: Require seated/no order, ask customer.chooseMeal(menu), construct Order,
-        // attach with customer.placeOrder, markActed, return it. D registers active order.
-        throw new UnsupportedOperationException("TODO[C] Waiter.takeOrder");
+        if (customer == null || menu == null) {
+            throw new IllegalArgumentException("Customer and menu are required.");
+        }
+        if (customer.getState() != CustomerState.SEATED) {
+            throw new IllegalStateException("Customer " + customer.getId() + " is not seated.");
+        }
+        if (customer.getOrder() != null) {
+            throw new IllegalStateException("Customer " + customer.getId() + " already has an order.");
+        }
+
+        MenuItem item = customer.chooseMeal(menu);
+        if (item == null) {
+            throw new IllegalStateException("Customer did not choose a menu item.");
+        }
+        Order order = new Order(customer, item);
+        customer.placeOrder(order);
+        markActed();
+        return order;
     }
 
     public void serve(Order order, int turn) {
         requireAvailable();
-        // TODO[C]: Validate customer SEATED and order.isServable(turn), then update order
-        // and customer, markActed. D records served count once after successful service.
-        throw new UnsupportedOperationException("TODO[C] Waiter.serve");
+        if (order == null) {
+            throw new IllegalArgumentException("Order is required.");
+        }
+        Customer customer = order.getCustomer();
+        if (customer == null || customer.getOrder() != order
+                || customer.getState() != CustomerState.SEATED) {
+            throw new IllegalStateException("Order is not ready to be served.");
+        }
+        if (!order.isServable(turn)) {
+            throw new IllegalStateException("Order is not ready to be served this turn.");
+        }
+
+        order.markServed();
+        customer.markServed(turn);
+        markActed();
     }
 }
