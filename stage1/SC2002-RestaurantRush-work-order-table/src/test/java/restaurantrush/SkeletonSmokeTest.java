@@ -14,20 +14,20 @@ public final class SkeletonSmokeTest {
     public static void main(String[] args) {
         testPreviewShowsBaseSetup();
         testInvalidInputAllowsRetry();
-        testStartCannotFabricateACompletedGame();
+        testInterruptedGameDoesNotFabricateAResult();
         testEndOfInputExits();
         testCollectionsProtectRestaurantState();
         testStaffSkipAndReset();
         testPendingActionsDoNotConsumeStaffTask();
         testMenuLookupAndValidation();
-        testPendingOrderDoesNotSilentlyProgress();
+        testImplementedOrderProgressesExactlyOneUnit();
         System.out.println("PASS " + passed + "/9 scaffold smoke scenarios");
-        System.out.println("Stage 1 gameplay acceptance: NOT RUN (business methods are TODOs).");
+        System.out.println("Stage 1 gameplay acceptance: NOT RUN (Part C business methods are TODOs).");
     }
 
     private static void testPreviewShowsBaseSetup() {
         String text = run("menu\nstatus\nquit\n", new Restaurant());
-        check(text.contains("SKELETON") && text.contains("Turn: 0"), "preview must identify pre-game scaffold");
+        check(text.contains("Restaurant Rush - Stage 1") && text.contains("Turn 0 / 18"), "preview must show the pre-game state");
         check(text.contains("Tables: 2") && text.contains("1, 4, 7, 10, 13, 16"), "base setup not displayed");
         check(text.contains("$9.00") && text.contains("$15.00") && text.contains("$18.00"), "menu prices missing");
         check(text.contains("Revenue: $0.00") && text.contains("Paid average: N/A"), "unpaid state reported incorrectly");
@@ -41,12 +41,10 @@ public final class SkeletonSmokeTest {
         passed++;
     }
 
-    private static void testStartCannotFabricateACompletedGame() {
-        Restaurant restaurant = new Restaurant();
-        String text = run("start\nstatus\nquit\n", restaurant);
-        check(text.contains("Not implemented") && text.contains("TODO[D]"), "unfinished start must be explicit");
-        check(restaurant.getTurn() == 0 && restaurant.getCustomers().isEmpty(), "unfinished start mutated game state");
-        check(!text.contains("VICTORY") && !text.contains("DEFEAT"), "scaffold fabricated a game result");
+    private static void testInterruptedGameDoesNotFabricateAResult() {
+        String text = run("start\nstatus\nquit\n", new Restaurant());
+        check(text.contains("interrupted"), "ending the input mid-game must be reported as an interruption");
+        check(!text.contains("VICTORY") && !text.contains("DEFEAT"), "an interrupted game fabricated a result");
         passed++;
     }
 
@@ -95,11 +93,11 @@ public final class SkeletonSmokeTest {
         passed++;
     }
 
-    private static void testPendingOrderDoesNotSilentlyProgress() {
+    private static void testImplementedOrderProgressesExactlyOneUnit() {
         Order order = new Order(new RegularCustomer(1), new Menu().find("Pasta"));
-        expect(UnsupportedOperationException.class, () -> order.advance(2));
-        check(order.getUnitsDone() == 0 && order.getStatus() == OrderStatus.PLACED,
-                "unfinished kitchen transition silently changed state");
+        order.advance(2);
+        check(order.getUnitsDone() == 1 && order.getStatus() == OrderStatus.PREPARING,
+                "one preparation action must advance Pasta by exactly one unit");
         passed++;
     }
 

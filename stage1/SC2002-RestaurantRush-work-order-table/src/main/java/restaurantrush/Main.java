@@ -11,7 +11,7 @@ public final class Main {
             ui.showWelcome();
             ui.showMenu(restaurant.getMenu());
             ui.showTurnState(restaurant);
-            ui.showMessage("Scaffold wiring OK. Gameplay is not implemented yet.");
+            ui.showMessage("Wiring OK. Type start to play.");
             return;
         }
         if (args.length == 1 && args[0].equals("--help")) {

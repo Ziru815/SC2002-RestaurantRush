@@ -24,8 +24,11 @@ public final class Waiter extends Staff {
         if (customer == null || menu == null) {
             throw new IllegalArgumentException("Customer and menu are required.");
         }
-        if (customer.getState() != CustomerState.SEATED || customer.getOrder() != null) {
-            throw new IllegalStateException("Customer is not ready to place an order.");
+        if (customer.getState() != CustomerState.SEATED) {
+            throw new IllegalStateException("Customer " + customer.getId() + " is not seated.");
+        }
+        if (customer.getOrder() != null) {
+            throw new IllegalStateException("Customer " + customer.getId() + " already has an order.");
         }
 
         MenuItem item = customer.chooseMeal(menu);
