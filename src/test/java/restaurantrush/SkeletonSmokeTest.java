@@ -20,9 +20,9 @@ public final class SkeletonSmokeTest {
         testStaffSkipAndReset();
         testPendingActionsDoNotConsumeStaffTask();
         testMenuLookupAndValidation();
-        testPendingOrderDoesNotSilentlyProgress();
+        testImplementedOrderProgressesExactlyOneUnit();
         System.out.println("PASS " + passed + "/9 scaffold smoke scenarios");
-        System.out.println("Stage 1 gameplay acceptance: NOT RUN (business methods are TODOs).");
+        System.out.println("Stage 1 gameplay acceptance: NOT RUN (Part C business methods are TODOs).");
     }
 
     private static void testPreviewShowsBaseSetup() {
@@ -93,11 +93,11 @@ public final class SkeletonSmokeTest {
         passed++;
     }
 
-    private static void testPendingOrderDoesNotSilentlyProgress() {
+    private static void testImplementedOrderProgressesExactlyOneUnit() {
         Order order = new Order(new RegularCustomer(1), new Menu().find("Pasta"));
-        expect(UnsupportedOperationException.class, () -> order.advance(2));
-        check(order.getUnitsDone() == 0 && order.getStatus() == OrderStatus.PLACED,
-                "unfinished kitchen transition silently changed state");
+        order.advance(2);
+        check(order.getUnitsDone() == 1 && order.getStatus() == OrderStatus.PREPARING,
+                "one preparation action must advance Pasta by exactly one unit");
         passed++;
     }
 

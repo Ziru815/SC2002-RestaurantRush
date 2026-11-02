@@ -25,28 +25,45 @@ public final class Order {
     public int getReadyTurn() { return readyTurn; }
 
     public void advance(int turn) {
-        // TODO[B]: PLACED/PREPARING only; add exactly one unit, READY at prepUnits.
-        // Set readyTurn only when the last unit completes.
-        throw new UnsupportedOperationException("TODO[B] Order.advance");
+        if (turn < 1) {
+            throw new IllegalArgumentException("Preparation turn must be positive.");
+        }
+        if (status != OrderStatus.PLACED && status != OrderStatus.PREPARING) {
+            throw new IllegalStateException("Only an unfinished order can be prepared.");
+        }
+        unitsDone++;
+        if (unitsDone == item.getPrepUnits()) {
+            status = OrderStatus.READY;
+            readyTurn = turn;
+        } else {
+            status = OrderStatus.PREPARING;
+        }
     }
 
     public boolean isServable(int turn) {
-        // TODO[B]: status == READY and turn > readyTurn.
-        throw new UnsupportedOperationException("TODO[B] Order.isServable");
+        return status == OrderStatus.READY && turn > readyTurn;
     }
 
     public void markServed() {
-        // TODO[B]: READY -> SERVED. Waiter checks isServable(turn) before calling.
-        throw new UnsupportedOperationException("TODO[B] Order.markServed");
+        if (status != OrderStatus.READY) {
+            throw new IllegalStateException("Only a ready order can be served.");
+        }
+        status = OrderStatus.SERVED;
     }
 
     public void markPaid() {
-        // TODO[B]: SERVED -> PAID. Cashier checks customer.canPay(turn) first.
-        throw new UnsupportedOperationException("TODO[B] Order.markPaid");
+        if (status != OrderStatus.SERVED) {
+            throw new IllegalStateException("Only a served order can be paid.");
+        }
+        status = OrderStatus.PAID;
     }
 
     public void cancel() {
-        // TODO[B]: PLACED/PREPARING/READY -> CANCELLED; reject served or paid orders.
-        throw new UnsupportedOperationException("TODO[B] Order.cancel");
+        if (status != OrderStatus.PLACED
+                && status != OrderStatus.PREPARING
+                && status != OrderStatus.READY) {
+            throw new IllegalStateException("Only an unfinished order can be cancelled.");
+        }
+        status = OrderStatus.CANCELLED;
     }
 }
