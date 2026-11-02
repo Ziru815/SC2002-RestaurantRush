@@ -86,7 +86,7 @@ public final class ControllerTests {
         check(text.contains("There is no table 9."), "bad table number must be explained");
         check(text.contains("Customer 5 is not in the waiting queue."), "unknown queued customer must be explained");
         check(text.contains("Customer 1 has no order."), "serving without an order must be explained");
-        check(text.contains("Customer is not ready to place an order."), "ordering before seating must be explained");
+        check(text.contains("Customer 1 is not seated."), "ordering before seating must be explained");
         check(text.contains("Waiter seats customer 1 at table 1."), "the Waiter's task must still be available after the errors");
         check(text.contains("Chef waits."), "the Chef's task must still be available after the errors");
         passed++;

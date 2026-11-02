@@ -18,10 +18,30 @@ public final class Cashier extends Staff {
 
     public int collectPayment(Customer customer, int turn) {
         requireAvailable();
-        // TODO[C]: Validate customer.canPay(turn), order SERVED, occupied table.
-        // Save the table reference; mark order PAID and customer PAID; release table.
-        // Add lockedPriceCents and snapshot satisfaction exactly once; markActed.
-        // Return amount in cents. D removes the paid order from activeOrders.
-        throw new UnsupportedOperationException("TODO[C] Cashier.collectPayment");
+        if (customer == null) {
+            throw new IllegalArgumentException("Customer is required.");
+        }
+        Order order = customer.getOrder();
+        Table table = customer.getTable();
+        if (order == null || order.getCustomer() != customer
+                || order.getStatus() != OrderStatus.SERVED) {
+            throw new IllegalStateException("Customer has no payable served order.");
+        }
+        if (table == null || table.getOccupant() != customer) {
+            throw new IllegalStateException("Customer has no occupied table.");
+        }
+        if (!customer.canPay(turn)) {
+            throw new IllegalStateException("Customer cannot pay this turn.");
+        }
+
+        int amount = order.getLockedPriceCents();
+        int satisfaction = customer.getSatisfaction();
+        order.markPaid();
+        customer.markPaid();
+        table.release();
+        revenueCents += amount;
+        paidSatisfactions.add(satisfaction);
+        markActed();
+        return amount;
     }
 }
