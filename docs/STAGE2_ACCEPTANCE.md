@@ -6,8 +6,8 @@ The scaffold is not a completed stage. A passing Stage 1 regression run does not
 - [ ] Waiting loss Regular 8 / VIP 5 / Critic 12; clamp 0; loss only QUEUED/SEATED.
 - [ ] VIP bills use 90% (Salad 810, Burger 1350, Pasta 1620 cents); others full price.
 - [ ] Bill quoted once on placement, locked, and collected once; no unpaid revenue or double discount.
-- [ ] Critic preference is documented and observed; scaffold choice: always Pasta.
-- [ ] Six arrivals at 1/4/7/10/13/16 with at least one VIP and Critic; scaffold choice: IDs 2/3.
+- [ ] Critic preference is documented and observed; scaffold choice: always Pasta. Demonstrate that Regular ID 4 would choose Salad but Critic ID 4 chooses Pasta.
+- [ ] Six arrivals at 1/4/7/10/13/16 with at least one VIP and Critic; scaffold choice: VIP ID 2 and Critic ID 4.
 - [ ] Customer behavior is polymorphic, without type-check chains in controller/UI/staff.
 - [ ] Default Stage 1 regression path remains functional; --stage2 launches the complete mixed game.
 - [ ] Stage 2 screen identifies stage/customer types, chosen meals, bills, state and staff availability.

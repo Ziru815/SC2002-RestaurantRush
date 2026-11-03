@@ -33,7 +33,6 @@ For IDE use, set JDK 17+, main source root `src/main/java`, test root `src/test/
 - [Stage 2 acceptance checklist](docs/STAGE2_ACCEPTANCE.md)
 - [Current implementation status](docs/IMPLEMENTATION_STATUS.md)
 - [Submission checklist and responsibilities](docs/SUBMISSION_CHECKLIST.md)
-- [English group message to copy](docs/STAGE2_GROUP_MESSAGE.txt)
 
 Find work with `rg 'TODO\[[ABCD]-S2\]' src` or your IDE's search. Keep the single normal `src/` tree. No nested ZIP uploads, fake authorship or fabricated student contributions.
 
