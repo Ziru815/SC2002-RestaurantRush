@@ -27,16 +27,16 @@ Java 文件均在 `src/main/java/restaurantrush/` 或 `src/test/java/restaurantr
 | `Customer.getTypeLabel(): String` | Regular / VIP / Critic，仅供显示，不能用字符串分支实现游戏规则 |
 | `Order(Customer, MenuItem)` | B 在构造时调用一次 `priceFor`，保存 final lockedPriceCents |
 | `Cashier.collectPayment(Customer, int)` | 只取订单锁定金额，不重新报价、不二次折扣 |
-| `Stage2Arrivals.create(int id): Customer` | D 校验 1..6；ID 2 为 VIP，ID 3 为 Critic，其余 Regular |
+| `Stage2Arrivals.create(int id): Customer` | D 校验 1..6；ID 2 为 VIP，ID 4 为 Critic，其余 Regular |
 
-**组内设计选择**：Critic 固定选 Pasta，ID 2/3 替换为 VIP/Critic。这两点是本框架选定的可复现方案，不是老师强制的具体菜品/顺序。VIP 若出现非整分价格，采用四舍五入到分（half-up），中间乘法用 long；三种基础菜单的九折本身都恰好是整数分。
+**组内设计选择**：Critic 固定选 Pasta，ID 2/4 替换为 VIP/Critic。普通 4 号按原有循环会选 Salad，Critic 4 号则选 Pasta，因此在基础运行里能直接看到偏好的差异。这两点是本框架选定的可复现方案，不是老师强制的具体菜品/顺序。VIP 若出现非整分价格，采用四舍五入到分（half-up），中间乘法用 long；三种基础菜单的九折本身都恰好是整数分。
 
 ## A：顾客行为
 
 - [ ] 写 `Stage2CustomerTests`：初始 100；等待一轮后 Regular 92、VIP 95、Critic 88；多轮不能低于 0；服务后不再扣分。
 - [ ] 填 VIP 的 `waitingLoss()` 和 `priceFor()`，Critic 的 `waitingLoss()` 和 `chooseMeal()`。
 - [ ] 报价：VIP Salad 810、Burger 1350、Pasta 1620；Regular/Critic 原价；菜单价格不变；测试 null 输入和金额边界。
-- [ ] 用不同 Critic ID 证明都选择 Pasta；Regular/VIP 的旧循环不变；父类引用也能调用不同子类行为。
+- [ ] 明确测试 RegularCustomer(4) 选 Salad、CriticCustomer(4) 选 Pasta；用不同 Critic ID 证明都选择 Pasta；Regular/VIP 的旧循环不变；父类引用也能调用不同子类行为。
 - [ ] `sh scripts/test.sh` 后运行 `java -cp out/main:out/test restaurantrush.Stage2CustomerTests`。
 - [ ] 提交自己能解释的代码、测试和顾客设计说明；更新 Stage 2 类图中的继承和操作。
 
@@ -61,7 +61,7 @@ C 的主要交付是测试代码和验收；生产员工类本来就接收 Custo
 
 ## D：到达、界面和整合
 
-- [ ] 实现 Stage2Arrivals：六个 ID，恰好一个 VIP、一个 Critic；拒绝 0/7，所有人初始 100。
+- [ ] 实现 Stage2Arrivals：六个 ID，2 号 VIP、4 号 Critic，其余 Regular；拒绝 0/7，所有人初始 100。
 - [ ] 为 GameController 增加可注入的 `IntFunction<Customer>` 到达构造器；保留旧两参数构造器默认 `RegularCustomer::new`。改 processArrivals 调用构造器，不按子类判断扣分/折扣。
 - [ ] Main 增加 `--stage2` 选择 `Stage2Arrivals::create`；默认、--check、--help 保持兼容，help 说明新选项。
 - [ ] ConsoleUI 支持准确的阶段标题，并显示顾客类型；使用重载构造器等兼容方式保留现有调用，UI 不参与计算。
