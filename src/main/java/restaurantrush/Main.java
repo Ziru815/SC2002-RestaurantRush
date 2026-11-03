@@ -4,6 +4,8 @@ package restaurantrush;
 public final class Main {
     private Main() { }
 
+    // TODO[D-S2]: add --stage2 to select Stage2Arrivals::create; keep default
+    // Stage 1, --check and --help compatible. Do not enable incomplete stubs.
     public static void main(String[] args) {
         ConsoleUI ui = new ConsoleUI(System.in, System.out);
         Restaurant restaurant = new Restaurant();

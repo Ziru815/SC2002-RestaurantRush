@@ -17,6 +17,8 @@ public final class ConsoleUI {
         this.output = output;
     }
 
+    // TODO[D-S2]: show the selected stage and getTypeLabel() in the customer list.
+    // Preserve the Stage 1 default and keep pricing/state rules out of this UI.
     public void showWelcome() {
         output.println("Restaurant Rush - Stage 1");
         output.println("You are the manager. Each turn you choose one task for the Waiter and one for the Chef.");

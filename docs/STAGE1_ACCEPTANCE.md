@@ -1,6 +1,6 @@
 # Stage 1 Acceptance Checklist
 
-All gameplay items below are **pending** in this skeleton. Record actual evidence before checking an item.
+Stage 1 code is preserved at `stage-1` (8d7fa09). The four automated suites and two replay results are recorded in [evidence/stage1](evidence/stage1/README.md). The historical manual checklist remains unchecked where no separate sign-off was recorded; do not interpret every unchecked item as an observed defect.
 
 ## Build and reproducibility
 - [ ] Fresh checkout compiles and runs offline on Java 17+.
@@ -52,8 +52,8 @@ Use a controlled Regular customer who orders Pasta, with full attention. This fi
 ## Required real run evidence
 | Run | Input script/path | Actual paid/revenue/average | Actual result | Verified commit |
 | --- | --- | --- | --- | --- |
-| Victory | Pending | Pending | Pending | Pending |
-| Defeat | Pending | Pending | Pending | Pending |
+| Victory | evidence/stage1/victory.input.txt | 5 / $66.00 / 79.2 | VICTORY | 8d7fa09 |
+| Defeat | evidence/stage1/defeat.input.txt | 0 / $0.00 / N/A | DEFEAT | 8d7fa09 |
 
 - [ ] Save exact inputs and actual outputs for both runs; another group member reproduces them.
 - [ ] Update class diagram to match the final code.

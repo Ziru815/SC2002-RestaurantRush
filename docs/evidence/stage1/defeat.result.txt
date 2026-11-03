@@ -1,0 +1,7 @@
+
+===== Game over =====
+Turns used: 18
+Served: 0 | Paid: 0 | Unhappy departures: 2
+Revenue: $0.00
+Average satisfaction of paid customers: N/A
+DEFEAT

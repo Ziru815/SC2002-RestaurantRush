@@ -1,3 +1,5 @@
+> Historical Stage 1 implementation guide. The old skeleton-status statements below describe the original handoff, not current main. Stage 1 is now preserved at `stage-1`; use [the Stage 2 guide](STAGE2_TEAM_GUIDE.md) for current work.
+
 # Stage 1 四人分工与接入说明
 
 这份骨架已经把类、构造函数和调用入口接起来，但还没有实现完整游戏。先由四人认领 A/B/C/D，分别填写负责的方法；D 负责把各部分接成回合流程，其他成员一起排查整合问题。角色代号不是人名，也不表示工作量恰好相等。
