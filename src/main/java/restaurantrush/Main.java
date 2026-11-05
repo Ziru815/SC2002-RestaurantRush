@@ -24,7 +24,7 @@ public final class Main {
             usageError();
         }
 
-        ConsoleUI ui = new ConsoleUI(System.in, System.out);
+        ConsoleUI ui = new ConsoleUI(System.in, System.out, stage2 ? 2 : 1);
         Restaurant restaurant = new Restaurant();
         if (check) {
             ui.showWelcome();
