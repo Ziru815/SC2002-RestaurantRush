@@ -11,25 +11,27 @@ import java.util.stream.Collectors;
 public final class ConsoleUI {
     private final Scanner input;
     private final PrintStream output;
-    private final int stage;
+    private static final String STAGE_1 = "Stage 1";
+
+    private final String stageLabel;
 
     /** The Stage 1 screen. */
     public ConsoleUI(InputStream input, PrintStream output) {
-        this(input, output, 1);
+        this(input, output, STAGE_1);
     }
 
-    /** From Stage 2 on, the screen also shows each customer's type. */
-    public ConsoleUI(InputStream input, PrintStream output, int stage) {
-        if (stage < 1) {
-            throw new IllegalArgumentException("Stage must be 1 or higher.");
+    /** Names the stage in the title. Any stage other than Stage 1 also shows each customer's type. */
+    public ConsoleUI(InputStream input, PrintStream output, String stageLabel) {
+        if (stageLabel == null || stageLabel.isBlank()) {
+            throw new IllegalArgumentException("Stage label is required.");
         }
         this.input = new Scanner(input, StandardCharsets.UTF_8);
         this.output = output;
-        this.stage = stage;
+        this.stageLabel = stageLabel;
     }
 
     public void showWelcome() {
-        output.println("Restaurant Rush - Stage " + stage);
+        output.println("Restaurant Rush - " + stageLabel);
         output.println("You are the manager. Each turn you choose one task for the Waiter and one for the Chef.");
         output.println("Tables: " + GameConfig.TABLE_COUNT + "; turns: " + GameConfig.MAX_TURNS);
         output.println("Arrivals on turns: " + GameConfig.ARRIVAL_TURNS.stream().map(String::valueOf).collect(Collectors.joining(", ")));
@@ -138,7 +140,7 @@ public final class ConsoleUI {
 
     /** Display only: the type comes from the customer, the screen never decides anything from it. */
     private String typeTag(Customer customer) {
-        return stage >= 2 ? " (" + customer.getTypeLabel() + ")" : "";
+        return STAGE_1.equals(stageLabel) ? "" : " (" + customer.getTypeLabel() + ")";
     }
 
     private String describeOrder(Order order) {

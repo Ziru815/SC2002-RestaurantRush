@@ -68,7 +68,7 @@ public final class Stage2ControllerTests {
 
     private static void testControllerAsksTheFactoryOnEachArrivalTurn() {
         List<Integer> asked = new ArrayList<>();
-        String text = play(allWait(), 1, id -> {
+        String text = play(allWait(), "Stage 1", id -> {
             asked.add(id);
             return new RegularCustomer(id);
         });
@@ -83,7 +83,7 @@ public final class Stage2ControllerTests {
     }
 
     private static void testStage2ScreenNamesTheStageAndEachCustomerType() {
-        String text = play(UNTIL_TURN_4, 2, Stage2Arrivals::create);
+        String text = play(UNTIL_TURN_4, "Stage 2", Stage2Arrivals::create);
         check(text.contains("Restaurant Rush - Stage 2"), "the Stage 2 welcome must name the stage");
         check(!text.contains("Restaurant Rush - Stage 1"), "the Stage 2 welcome must not say Stage 1");
         check(text.contains("C1 (Regular) | satisfaction:"), "customer 1 must be shown as Regular");
@@ -92,7 +92,7 @@ public final class Stage2ControllerTests {
     }
 
     private static void testDefaultGameStaysStage1() {
-        String text = play(UNTIL_TURN_4, 1, RegularCustomer::new);
+        String text = play(UNTIL_TURN_4, "Stage 1", RegularCustomer::new);
         check(text.contains("Restaurant Rush - Stage 1"), "the default game must say Stage 1");
         check(text.contains("C2 | satisfaction: 100 | QUEUED"), "the Stage 1 customer line must have no type label");
         check(!text.contains("(Regular)") && !text.contains("(VIP)") && !text.contains("(Critic)"),
@@ -101,7 +101,7 @@ public final class Stage2ControllerTests {
     }
 
     private static void testInvalidInputInTheStage2GameDoesNotUseTheTask() {
-        String text = play("start\ndance\nseat 9 1\nseat 1 9\nseat 1 1\ncook x\nwait\n", 2, Stage2Arrivals::create);
+        String text = play("start\ndance\nseat 9 1\nseat 1 9\nseat 1 1\ncook x\nwait\n", "Stage 2", Stage2Arrivals::create);
         check(text.contains("Unknown Waiter command \"dance\""), "an unknown command must be explained");
         check(text.contains("Customer 9 is not in the waiting queue."), "an unknown customer must be explained");
         check(text.contains("There is no table 9."), "a bad table number must be explained");
@@ -116,13 +116,13 @@ public final class Stage2ControllerTests {
             new GameController(new Restaurant(), ui, null);
             throw new AssertionError("a missing arrival factory must be rejected");
         } catch (NullPointerException expected) {
-            check(expected.getMessage().equals("arrivals"), "the message must name the missing argument");
+            check(expected.getMessage().equals("arrivalFactory"), "the message must name the missing argument");
         }
         try {
-            new ConsoleUI(new ByteArrayInputStream(new byte[0]), new PrintStream(new ByteArrayOutputStream()), 0);
-            throw new AssertionError("stage 0 must be rejected");
+            new ConsoleUI(new ByteArrayInputStream(new byte[0]), new PrintStream(new ByteArrayOutputStream()), " ");
+            throw new AssertionError("a blank stage label must be rejected");
         } catch (IllegalArgumentException expected) {
-            check(expected.getMessage().contains("Stage"), "the message must mention the stage");
+            check(expected.getMessage().contains("Stage label"), "the message must mention the stage label");
         }
         passed++;
     }
@@ -131,11 +131,11 @@ public final class Stage2ControllerTests {
         return "start\n" + "wait\nwait\n".repeat(18);
     }
 
-    private static String play(String commands, int stage, IntFunction<Customer> arrivals) {
+    private static String play(String commands, String stageLabel, IntFunction<Customer> arrivalFactory) {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         ConsoleUI ui = new ConsoleUI(new ByteArrayInputStream(commands.getBytes(StandardCharsets.UTF_8)),
-                new PrintStream(output, true, StandardCharsets.UTF_8), stage);
-        new GameController(new Restaurant(), ui, arrivals).run();
+                new PrintStream(output, true, StandardCharsets.UTF_8), stageLabel);
+        new GameController(new Restaurant(), ui, arrivalFactory).run();
         return output.toString(StandardCharsets.UTF_8);
     }
 

@@ -24,7 +24,7 @@ public final class Main {
             usageError();
         }
 
-        ConsoleUI ui = new ConsoleUI(System.in, System.out, stage2 ? 2 : 1);
+        ConsoleUI ui = new ConsoleUI(System.in, System.out, stage2 ? "Stage 2" : "Stage 1");
         Restaurant restaurant = new Restaurant();
         if (check) {
             ui.showWelcome();
@@ -39,8 +39,8 @@ public final class Main {
                     + "without it you play Stage 1 with Regular customers only.");
             return;
         }
-        IntFunction<Customer> arrivals = stage2 ? Stage2Arrivals::create : RegularCustomer::new;
-        new GameController(restaurant, ui, arrivals).run();
+        IntFunction<Customer> arrivalFactory = stage2 ? Stage2Arrivals::create : RegularCustomer::new;
+        new GameController(restaurant, ui, arrivalFactory).run();
     }
 
     private static void usageError() {
