@@ -27,9 +27,6 @@ public final class Waiter extends Staff {
         if (customer.getState() != CustomerState.SEATED) {
             throw new IllegalStateException("Customer " + customer.getId() + " is not seated.");
         }
-        if (customer.getTable() == null || customer.getTable().getOccupant() != customer) {
-            throw new IllegalStateException("Customer " + customer.getId() + " has no occupied table.");
-        }
         if (customer.getOrder() != null) {
             throw new IllegalStateException("Customer " + customer.getId() + " already has an order.");
         }
@@ -51,8 +48,7 @@ public final class Waiter extends Staff {
         }
         Customer customer = order.getCustomer();
         if (customer == null || customer.getOrder() != order
-                || customer.getState() != CustomerState.SEATED
-                || customer.getTable() == null || customer.getTable().getOccupant() != customer) {
+                || customer.getState() != CustomerState.SEATED) {
             throw new IllegalStateException("Order is not ready to be served.");
         }
         if (!order.isServable(turn)) {

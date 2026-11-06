@@ -9,14 +9,14 @@ public final class CriticCustomer extends Customer {
 
     @Override
     public int waitingLoss() {
-        return 12;
+        // TODO[A-S2]: return 12; inherited loss logic handles states and zero clamp.
+        throw new UnsupportedOperationException("TODO[A-S2]: Critic waiting loss");
     }
 
     @Override
     public MenuItem chooseMeal(Menu menu) {
-        if (menu == null) {
-            throw new IllegalArgumentException("Menu is required.");
-        }
-        return menu.find("Pasta");
+        // TODO[A-S2]: documented preference: always select Pasta; reject null.
+        // This is a team design choice, not a dish mandated by the assignment.
+        throw new UnsupportedOperationException("TODO[A-S2]: Critic Pasta preference");
     }
 }
