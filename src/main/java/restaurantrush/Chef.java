@@ -7,6 +7,11 @@ public final class Chef extends Staff {
         if (order == null) {
             throw new IllegalArgumentException("Order is required.");
         }
+        Customer customer = order.getCustomer();
+        if (customer == null || customer.getOrder() != order
+                || customer.getState() != CustomerState.SEATED) {
+            throw new IllegalStateException("Order is not an active seated customer's order.");
+        }
 
         // Order owns preparation progress and the READY/ready-turn transition.
         order.advance(turn);
