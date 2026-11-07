@@ -1,6 +1,6 @@
 package restaurantrush;
 
-/** Owner A. Stage 2 scaffold: not connected to the default Stage 1 game. */
+/** Critic customer: loses 12 satisfaction while waiting and always chooses Pasta. */
 public final class CriticCustomer extends Customer {
     public CriticCustomer(int id) { super(id); }
 
@@ -17,6 +17,7 @@ public final class CriticCustomer extends Customer {
         if (menu == null) {
             throw new IllegalArgumentException("Menu is required.");
         }
+        // Team-selected deterministic preference; full-price billing is inherited.
         return menu.find("Pasta");
     }
 }
