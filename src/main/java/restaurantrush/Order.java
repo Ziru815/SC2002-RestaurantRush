@@ -14,7 +14,9 @@ public final class Order {
     public Order(Customer customer, MenuItem item) {
         this.customer = Objects.requireNonNull(customer, "customer");
         this.item = Objects.requireNonNull(item, "item");
-        this.lockedPriceCents = customer.priceFor(item);
+        // Capture the polymorphic quote once. Later pricing changes must not
+        // alter an order that has already been placed.
+        this.lockedPriceCents = this.customer.priceFor(this.item);
     }
 
     public Customer getCustomer() { return customer; }
