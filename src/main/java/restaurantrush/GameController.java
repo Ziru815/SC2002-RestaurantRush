@@ -2,15 +2,25 @@ package restaurantrush;
 
 import java.util.Comparator;
 import java.util.Locale;
+import java.util.Objects;
+import java.util.function.IntFunction;
 
 /** Owner D. Runs the 18-turn game; asks the staff and customers to do the work and prints nothing itself. */
 public final class GameController {
     private final Restaurant restaurant;
     private final ConsoleUI ui;
+    private final IntFunction<Customer> arrivalFactory;
 
+    /** The Stage 1 game: every arriving customer is Regular. */
     public GameController(Restaurant restaurant, ConsoleUI ui) {
+        this(restaurant, ui, RegularCustomer::new);
+    }
+
+    /** Builds each arriving customer from its ID with the given factory, so a stage chooses who arrives. */
+    public GameController(Restaurant restaurant, ConsoleUI ui, IntFunction<Customer> arrivalFactory) {
         this.restaurant = restaurant;
         this.ui = ui;
+        this.arrivalFactory = Objects.requireNonNull(arrivalFactory, "arrivalFactory");
     }
 
     /** The manager's command line ran out of input before the game finished. */
@@ -73,13 +83,10 @@ public final class GameController {
         ui.showResult(restaurant, checkVictory());
     }
 
-    // TODO[D-S2]: support a configured arrival factory while preserving this
-    // class's existing constructor and default Regular-only regression path.
-    // Stage2Arrivals::create belongs in setup; no instanceof dispatch in game rules.
     private void processArrivals() {
         if (GameConfig.ARRIVAL_TURNS.contains(restaurant.getTurn())) {
             int id = restaurant.getCustomers().size() + 1;
-            restaurant.addArrival(new RegularCustomer(id));
+            restaurant.addArrival(arrivalFactory.apply(id));
             ui.showMessage("Customer " + id + " arrives and joins the queue.");
         }
     }

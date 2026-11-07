@@ -1,0 +1,232 @@
+classDiagram
+direction TB
+%% Implemented Stage 2 principal classes; routine getters and unchanged constructors omitted.
+class Main {
+    <<class>>
+    + main(args: String[]) void$
+}
+class GameConfig {
+    <<class>>
+    +int MAX_TURNS = 18$
+    +int TABLE_COUNT = 2$
+    +List~Integer~ ARRIVAL_TURNS$
+    +int MIN_PAID_CUSTOMERS = 4$
+    +int MIN_REVENUE_CENTS = 4500$
+    +int MIN_AVERAGE_SATISFACTION = 60$
+}
+class ConsoleUI {
+    <<boundary>>
+    -Scanner input
+    -PrintStream output
+    -String stageLabel
+    + ConsoleUI(input: InputStream, output: PrintStream)
+    + ConsoleUI(input: InputStream, output: PrintStream, stageLabel: String)
+    + readCommand() String
+    + readCommand(prompt: String) String
+    + showWelcome() void
+    + showTurnState(r: Restaurant) void
+    + showOrderTaken(o: Order) void
+    + showPayment(c: Customer, cents: int) void
+    + showTurnEnd(r: Restaurant) void
+    + showResult(r: Restaurant, win: boolean) void
+}
+class GameController {
+    <<control>>
+    -Restaurant restaurant
+    -ConsoleUI ui
+    -IntFunction~Customer~ arrivalFactory
+    + GameController(r: Restaurant, ui: ConsoleUI)
+    + GameController(r: Restaurant, ui: ConsoleUI, factory: IntFunction~Customer~)
+    + run() void
+    - processTurn() void
+    - processArrivals() void
+    - processWaiterChoice() void
+    - processChefChoice() void
+    - processEatingAndPayments() void
+    - processWaitingAndAbandonment() void
+    - resetStaffActions() void
+    - checkVictory() boolean
+}
+class Restaurant {
+    <<class>>
+    -List~Table~ tables
+    -Queue~Customer~ waitingQueue
+    -List~Customer~ customers
+    -List~Order~ activeOrders
+    -Menu menu
+    -Waiter waiter
+    -Chef chef
+    -Cashier cashier
+    -int turn
+    -int servedCount
+    -int unhappyDepartures
+    + nextTurn() void
+    + addArrival(c: Customer) void
+    + findCustomer(id: int) Customer
+    + findQueuedCustomer(id: int) Customer
+    + findTable(number: int) Table
+    + getOrder(customerId: int) Order
+    + addOrder(o: Order) void
+    + removeOrder(o: Order) void
+    + removeFromQueue(c: Customer) void
+    + handleDeparture(c: Customer) void
+}
+class Staff {
+    <<abstract>>
+    -boolean actedThisTurn
+    + hasActed() boolean
+    + resetTurn() void
+    + skipTurn() void
+    # requireAvailable() void
+    # markActed() void
+}
+class Waiter {
+    <<class>>
+    + seat(c: Customer, t: Table) void
+    + takeOrder(c: Customer, m: Menu) Order
+    + serve(o: Order, turn: int) void
+}
+class Chef {
+    <<class>>
+    + advance(o: Order, turn: int) void
+}
+class Cashier {
+    <<class>>
+    -int revenueCents
+    -List~Integer~ paidSatisfactions
+    + collectPayment(c: Customer, turn: int) int
+    + getRevenueCents() int
+    + getPaidCount() int
+    + getAverageSatisfaction() double
+}
+class Customer {
+    <<abstract>>
+    -int id
+    -int satisfaction
+    -CustomerState state
+    -Table table
+    -Order order
+    -int servedTurn
+    -int readyToPayTurn
+    + waitingLoss() int*
+    + loseWaitingSatisfaction() void
+    + chooseMeal(menu: Menu) MenuItem
+    + priceFor(item: MenuItem) int
+    + getTypeLabel() String
+    + seat(table: Table) void
+    + placeOrder(order: Order) void
+    + markServed(turn: int) void
+    + finishEating(turn: int) void
+    + canPay(turn: int) boolean
+    + markPaid() void
+    + leave() void
+}
+class RegularCustomer {
+    <<class>>
+    + waitingLoss() int
+}
+class VIPCustomer {
+    <<class>>
+    + waitingLoss() int
+    + priceFor(item: MenuItem) int
+    + getTypeLabel() String
+}
+class CriticCustomer {
+    <<class>>
+    + waitingLoss() int
+    + chooseMeal(menu: Menu) MenuItem
+    + getTypeLabel() String
+}
+class Stage2Arrivals {
+    <<class>>
+    + create(id: int) Customer$
+}
+class Table {
+    <<class>>
+    -int number
+    -Customer occupant
+    + isFree() boolean
+    + seat(c: Customer) void
+    + release() void
+}
+class Order {
+    <<class>>
+    -Customer customer
+    -MenuItem item
+    -int lockedPriceCents
+    -int unitsDone
+    -OrderStatus status
+    -int readyTurn
+    + Order(c: Customer, item: MenuItem)
+    + getLockedPriceCents() int
+    + advance(turn: int) void
+    + isServable(turn: int) boolean
+    + markServed() void
+    + markPaid() void
+    + cancel() void
+}
+class Menu {
+    <<class>>
+    -List~MenuItem~ items
+    + getItems() List~MenuItem~
+    + find(name: String) MenuItem
+}
+class MenuItem {
+    <<class>>
+    -String name
+    -int priceCents
+    -int prepUnits
+    + getName() String
+    + getPriceCents() int
+    + getPrepUnits() int
+}
+class CustomerState {
+    <<enumeration>>
+    QUEUED
+    SEATED
+    SERVED
+    READY_TO_PAY
+    PAID
+    LEFT
+}
+class OrderStatus {
+    <<enumeration>>
+    PLACED
+    PREPARING
+    READY
+    SERVED
+    PAID
+    CANCELLED
+}
+Main ..> GameController : creates
+Main ..> Stage2Arrivals : selects
+GameController ..> GameConfig : reads
+GameController "1" --> "1" ConsoleUI : uses
+GameController "1" --> "1" Restaurant : coordinates
+Restaurant "1" *-- "2" Table : owns
+Restaurant "1" *-- "1" Menu : owns
+Restaurant "1" --> "0..*" Customer : registry; queue is a subset
+Restaurant "1" --> "0..*" Order : active orders
+Staff <|-- Waiter
+Staff <|-- Chef
+Staff <|-- Cashier
+Customer <|-- RegularCustomer
+Customer <|-- VIPCustomer
+Customer <|-- CriticCustomer
+Table "0..1" -- "0..1" Customer : current seating
+Customer "1" -- "0..1" Order : places
+Menu "1" *-- "3" MenuItem : base items
+Order "0..*" --> "1" MenuItem : ordered item
+Customer ..> CustomerState : state
+Order ..> OrderStatus : status
+Restaurant "1" *-- "1" Waiter : waiter
+Restaurant "1" *-- "1" Chef : chef
+Restaurant "1" *-- "1" Cashier : cashier
+Stage2Arrivals ..> Customer : creates
+note for Customer "Encapsulation: private state changes through domain operations; waiting loss uses polymorphism (8/5/12)."
+note for VIPCustomer "90 percent quote in cents, half-up rounding with long arithmetic; no mutation of menu prices."
+note for CriticCustomer "Always Pasta. ID 4 differs from the Regular ID 4 Salad choice."
+note for Order "lockedPriceCents is readOnly: quote once during construction; Cashier never reprices."
+note for Restaurant "Composition: owns two tables, one menu and one employee per role. Six arrivals in the configured run."
+note for GameController "arrivalFactory selects customer creation; no type-check chains for pricing or waiting rules."
+note for ConsoleUI "stageLabel is display metadata. Old constructors retain Stage 1."

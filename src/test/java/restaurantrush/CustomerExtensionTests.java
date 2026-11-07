@@ -1,6 +1,6 @@
 package restaurantrush;
 
-/** Scaffold contract checks only; these do not certify Stage 2 gameplay. */
+/** Default Customer pricing and display contracts. */
 public final class CustomerExtensionTests {
     private CustomerExtensionTests() { }
 
@@ -21,6 +21,6 @@ public final class CustomerExtensionTests {
         } catch (IllegalArgumentException expected) {
             // The caller supplied no item; no quote can be produced.
         }
-        System.out.println("PASS 5/5 scaffold customer extension checks (not Stage 2 acceptance)");
+        System.out.println("PASS 5/5 customer extension checks");
     }
 }

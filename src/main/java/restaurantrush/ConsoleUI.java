@@ -11,16 +11,27 @@ import java.util.stream.Collectors;
 public final class ConsoleUI {
     private final Scanner input;
     private final PrintStream output;
+    private static final String STAGE_1 = "Stage 1";
 
+    private final String stageLabel;
+
+    /** The Stage 1 screen. */
     public ConsoleUI(InputStream input, PrintStream output) {
-        this.input = new Scanner(input, StandardCharsets.UTF_8);
-        this.output = output;
+        this(input, output, STAGE_1);
     }
 
-    // TODO[D-S2]: show the selected stage and getTypeLabel() in the customer list.
-    // Preserve the Stage 1 default and keep pricing/state rules out of this UI.
+    /** Names the stage in the title. Any stage other than Stage 1 also shows each customer's type. */
+    public ConsoleUI(InputStream input, PrintStream output, String stageLabel) {
+        if (stageLabel == null || stageLabel.isBlank()) {
+            throw new IllegalArgumentException("Stage label is required.");
+        }
+        this.input = new Scanner(input, StandardCharsets.UTF_8);
+        this.output = output;
+        this.stageLabel = stageLabel;
+    }
+
     public void showWelcome() {
-        output.println("Restaurant Rush - Stage 1");
+        output.println("Restaurant Rush - " + stageLabel);
         output.println("You are the manager. Each turn you choose one task for the Waiter and one for the Chef.");
         output.println("Tables: " + GameConfig.TABLE_COUNT + "; turns: " + GameConfig.MAX_TURNS);
         output.println("Arrivals on turns: " + GameConfig.ARRIVAL_TURNS.stream().map(String::valueOf).collect(Collectors.joining(", ")));
@@ -75,7 +86,7 @@ public final class ConsoleUI {
             output.println("Table " + table.getNumber() + ": " + (table.isFree() ? "free" : "C" + table.getOccupant().getId()));
         }
         for (Customer customer : restaurant.getCustomers()) {
-            output.println("C" + customer.getId() + " | satisfaction: " + customer.getSatisfaction()
+            output.println("C" + customer.getId() + typeTag(customer) + " | satisfaction: " + customer.getSatisfaction()
                     + " | " + customer.getState() + " | order: " + describeOrder(customer.getOrder()));
         }
         output.println("Waiter: " + availability(restaurant.getWaiter()) + " (seat / order / serve / wait)");
@@ -125,6 +136,11 @@ public final class ConsoleUI {
         output.println("Revenue: " + money(cashier.getRevenueCents()));
         output.println("Average satisfaction of paid customers: " + average(cashier));
         output.println(victory ? "VICTORY" : "DEFEAT");
+    }
+
+    /** Display only: the type comes from the customer, the screen never decides anything from it. */
+    private String typeTag(Customer customer) {
+        return STAGE_1.equals(stageLabel) ? "" : " (" + customer.getTypeLabel() + ")";
     }
 
     private String describeOrder(Order order) {

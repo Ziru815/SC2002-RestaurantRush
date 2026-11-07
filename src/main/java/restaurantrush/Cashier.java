@@ -34,7 +34,7 @@ public final class Cashier extends Staff {
             throw new IllegalStateException("Customer cannot pay this turn.");
         }
 
-        // TODO[C-S2]: verify this generic path with Stage2StaffTests.
+        // Customer-specific pricing was locked by Order; collect it without repricing.
         // Charge the locked bill once; never apply a second VIP discount here.
         int amount = order.getLockedPriceCents();
         int satisfaction = customer.getSatisfaction();

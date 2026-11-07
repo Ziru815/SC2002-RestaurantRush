@@ -5,7 +5,7 @@ Java 17+ command-line restaurant game. No third-party libraries or network acces
 ## Current status
 
 - **Stage 1 runnable baseline:** tag [`stage-1`](https://github.com/Ziru815/SC2002-RestaurantRush/releases/tag/stage-1), commit `8d7fa09ddae3053f97f9a7ebe9738f3335740133`, after PR #7. Four suites passed 40/40; a victory and defeat were replayed for all 18 turns. See [saved evidence](docs/evidence/stage1/README.md).
-- **This branch: Stage 2 scaffold only.** The default game still runs Stage 1. VIP/Critic behavior, pricing integration and mixed arrivals are intentionally TODO; `--stage2` is not enabled yet. Stage 2 tests must report pending/failure until the owners implement them.
+- **Stage 2 implemented:** run `sh scripts/run.sh --stage2`. VIP/Critic behavior, locked pricing and mixed arrivals are integrated; all 72 checks pass. Default launch keeps Stage 1. [Acceptance and replay evidence](docs/STAGE2_ACCEPTANCE.md).
 - **Stage 3:** not started. Do not mix Host, ComboMeal or Happy Hour into Stage 2.
 
 ## Build and play
@@ -14,16 +14,18 @@ Java 17+ command-line restaurant game. No third-party libraries or network acces
 sh scripts/run.sh
 # Enter start, then choose Waiter and Chef actions each turn.
 sh scripts/run.sh --check
+sh scripts/run.sh --stage2
+sh scripts/run.sh --stage2 --check
 sh scripts/test.sh
 ```
 
-`test.sh` compiles all main/test sources with Java 17, `-Xlint:all -Werror`, and runs the four existing suites plus five scaffold extension checks. A green result certifies those checks, not Stage 2 completion.
+`test.sh` compiles all main/test sources with Java 17, `-Xlint:all -Werror`, then runs all nine suites: 45 existing checks plus 27 Stage 2 scenarios (72 total), including complete mixed-customer victory and defeat games.
 
 ```sh
 sh scripts/test-stage2.sh
 ```
 
-This also runs four owner-specific Stage 2 suites. They deliberately fail as pending in the scaffold. Each owner replaces their suite placeholder with meaningful tests. Once Stage 2 is ready, D must include these suites in the normal test command without introducing script recursion.
+`test-stage2.sh` delegates to `test.sh`; suites run once, and any failure returns a nonzero exit status.
 
 For IDE use, set JDK 17+, main source root `src/main/java`, test root `src/test/java`, entry `restaurantrush.Main`. On Windows use an IDE or Git Bash.
 
@@ -34,7 +36,7 @@ For IDE use, set JDK 17+, main source root `src/main/java`, test root `src/test/
 - [Current implementation status](docs/IMPLEMENTATION_STATUS.md)
 - [Submission checklist and responsibilities](docs/SUBMISSION_CHECKLIST.md)
 
-Find work with `rg 'TODO\[[ABCD]-S2\]' src` or your IDE's search. Keep the single normal `src/` tree. No nested ZIP uploads, fake authorship or fabricated student contributions.
+Keep the single normal `src/` tree. All Stage 2 implementation placeholders are resolved. Use [the Stage 2 class diagram](docs/class-diagram-stage2.mmd) for the implemented interfaces.
 
 ## Rules retained from Stage 1
 
@@ -47,7 +49,7 @@ Repository: https://github.com/Ziru815/SC2002-RestaurantRush
 | Stage/transition | Evidence |
 | --- | --- |
 | Stage 1 | Fixed `stage-1` tag; replay inputs and results in docs/evidence/stage1 |
-| 1 -> 2 | Preparation only. Customer extension methods + subtype/factory stubs + owned test entry points + docs. Order and controller behavior unchanged. [Working comparison](https://github.com/Ziru815/SC2002-RestaurantRush/compare/stage-1...work/stage2-scaffold). D records final added/changed/deleted files and reasons once implemented. |
+| 1 -> 2 | Added VIPCustomer, CriticCustomer, Stage2Arrivals, customer extension/Stage 2 tests and replay inputs. Changed Customer pricing/type hooks, Order lock-at-placement, Waiter/Chef validation, controller/UI/Main stage setup and test scripts. No Stage 1 production classes deleted. [Immutable code comparison](https://github.com/Ziru815/SC2002-RestaurantRush/compare/8d7fa09ddae3053f97f9a7ebe9738f3335740133...2ece569a68a1ed92d3aaa1b05bc14c60cc851b79). |
 | 2 -> 3 | Pending; retain Stage 2 before adding Stage 3 features. |
 
 The old README at the immutable Stage 1 tag still says skeleton; these current notes correct that stale description without moving the tag. A final report and accurate diagrams remain separate deliverables.
