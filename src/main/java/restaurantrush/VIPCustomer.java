@@ -1,6 +1,6 @@
 package restaurantrush;
 
-/** Owner A. Stage 2 scaffold: not connected to the default Stage 1 game. */
+/** VIP customer: loses 5 satisfaction while waiting and receives a 10% discount. */
 public final class VIPCustomer extends Customer {
     public VIPCustomer(int id) { super(id); }
 
@@ -9,14 +9,16 @@ public final class VIPCustomer extends Customer {
 
     @Override
     public int waitingLoss() {
-        // TODO[A-S2]: return 5; inherited loss logic handles states and zero clamp.
-        throw new UnsupportedOperationException("TODO[A-S2]: VIP waiting loss");
+        return 5;
     }
 
     @Override
     public int priceFor(MenuItem item) {
-        // TODO[A-S2]: reject null; quote 90% in cents, nearest-cent half-up.
-        // Use long intermediate arithmetic; do not change the MenuItem price.
-        throw new UnsupportedOperationException("TODO[A-S2]: VIP price quote");
+        if (item == null) {
+            throw new IllegalArgumentException("Menu item is required.");
+        }
+        // Round the discounted bill to the nearest cent, with halves rounded up.
+        // A long intermediate prevents overflow even for Integer.MAX_VALUE cents.
+        return (int) ((item.getPriceCents() * 90L + 50L) / 100L);
     }
 }

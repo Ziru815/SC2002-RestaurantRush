@@ -1,6 +1,6 @@
 package restaurantrush;
 
-/** Owner A. Stage 2 scaffold: not connected to the default Stage 1 game. */
+/** Critic customer: loses 12 satisfaction while waiting and always chooses Pasta. */
 public final class CriticCustomer extends Customer {
     public CriticCustomer(int id) { super(id); }
 
@@ -9,14 +9,15 @@ public final class CriticCustomer extends Customer {
 
     @Override
     public int waitingLoss() {
-        // TODO[A-S2]: return 12; inherited loss logic handles states and zero clamp.
-        throw new UnsupportedOperationException("TODO[A-S2]: Critic waiting loss");
+        return 12;
     }
 
     @Override
     public MenuItem chooseMeal(Menu menu) {
-        // TODO[A-S2]: documented preference: always select Pasta; reject null.
-        // This is a team design choice, not a dish mandated by the assignment.
-        throw new UnsupportedOperationException("TODO[A-S2]: Critic Pasta preference");
+        if (menu == null) {
+            throw new IllegalArgumentException("Menu is required.");
+        }
+        // Team-selected deterministic preference; full-price billing is inherited.
+        return menu.find("Pasta");
     }
 }
