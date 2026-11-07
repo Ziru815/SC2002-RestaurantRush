@@ -1,0 +1,331 @@
+Restaurant Rush - Stage 2
+You are the manager. Each turn you choose one task for the Waiter and one for the Chef.
+Tables: 2; turns: 18
+Arrivals on turns: 1, 4, 7, 10, 13, 16
+To win, after the last turn: paid customers >= 4, revenue >= $45.00, paid-customer average satisfaction >= 60
+Before the game: status | menu | tasks | help | start | quit
+Waiter: seat <customerId> <tableNo> | order <customerId> | serve <customerId> | wait
+Chef:   cook <customerId> | wait
+In any prompt: status shows the restaurant again; help shows this list.
+
+===== Turn 0 / 18 =====
+Revenue: $0.00 | Paid: 0 | Paid average: N/A
+Waiting queue: empty
+Table 1: free
+Table 2: free
+Waiter: available (seat / order / serve / wait)
+Chef: available (cook one order / wait)
+Cashier: available (automatic payment)
+Served: 0 | Unhappy departures: 0
+> Customer 1 arrives and joins the queue.
+
+===== Turn 1 / 18 =====
+Revenue: $0.00 | Paid: 0 | Paid average: N/A
+Waiting queue: C1
+Table 1: free
+Table 2: free
+C1 (Regular) | satisfaction: 100 | QUEUED | order: none
+Waiter: available (seat / order / serve / wait)
+Chef: available (cook one order / wait)
+Cashier: available (automatic payment)
+Served: 0 | Unhappy departures: 0
+Waiter> Waiter waits.
+Chef> Chef waits.
+End of turn 1: served 0 | unhappy departures 0 | revenue $0.00 | paid average N/A | turns used 1
+
+===== Turn 2 / 18 =====
+Revenue: $0.00 | Paid: 0 | Paid average: N/A
+Waiting queue: C1
+Table 1: free
+Table 2: free
+C1 (Regular) | satisfaction: 92 | QUEUED | order: none
+Waiter: available (seat / order / serve / wait)
+Chef: available (cook one order / wait)
+Cashier: available (automatic payment)
+Served: 0 | Unhappy departures: 0
+Waiter> Waiter waits.
+Chef> Chef waits.
+End of turn 2: served 0 | unhappy departures 0 | revenue $0.00 | paid average N/A | turns used 2
+
+===== Turn 3 / 18 =====
+Revenue: $0.00 | Paid: 0 | Paid average: N/A
+Waiting queue: C1
+Table 1: free
+Table 2: free
+C1 (Regular) | satisfaction: 84 | QUEUED | order: none
+Waiter: available (seat / order / serve / wait)
+Chef: available (cook one order / wait)
+Cashier: available (automatic payment)
+Served: 0 | Unhappy departures: 0
+Waiter> Waiter waits.
+Chef> Chef waits.
+End of turn 3: served 0 | unhappy departures 0 | revenue $0.00 | paid average N/A | turns used 3
+Customer 2 arrives and joins the queue.
+
+===== Turn 4 / 18 =====
+Revenue: $0.00 | Paid: 0 | Paid average: N/A
+Waiting queue: C1, C2
+Table 1: free
+Table 2: free
+C1 (Regular) | satisfaction: 76 | QUEUED | order: none
+C2 (VIP) | satisfaction: 100 | QUEUED | order: none
+Waiter: available (seat / order / serve / wait)
+Chef: available (cook one order / wait)
+Cashier: available (automatic payment)
+Served: 0 | Unhappy departures: 0
+Waiter> Waiter waits.
+Chef> Chef waits.
+End of turn 4: served 0 | unhappy departures 0 | revenue $0.00 | paid average N/A | turns used 4
+
+===== Turn 5 / 18 =====
+Revenue: $0.00 | Paid: 0 | Paid average: N/A
+Waiting queue: C1, C2
+Table 1: free
+Table 2: free
+C1 (Regular) | satisfaction: 68 | QUEUED | order: none
+C2 (VIP) | satisfaction: 95 | QUEUED | order: none
+Waiter: available (seat / order / serve / wait)
+Chef: available (cook one order / wait)
+Cashier: available (automatic payment)
+Served: 0 | Unhappy departures: 0
+Waiter> Waiter waits.
+Chef> Chef waits.
+End of turn 5: served 0 | unhappy departures 0 | revenue $0.00 | paid average N/A | turns used 5
+
+===== Turn 6 / 18 =====
+Revenue: $0.00 | Paid: 0 | Paid average: N/A
+Waiting queue: C1, C2
+Table 1: free
+Table 2: free
+C1 (Regular) | satisfaction: 60 | QUEUED | order: none
+C2 (VIP) | satisfaction: 90 | QUEUED | order: none
+Waiter: available (seat / order / serve / wait)
+Chef: available (cook one order / wait)
+Cashier: available (automatic payment)
+Served: 0 | Unhappy departures: 0
+Waiter> Waiter waits.
+Chef> Chef waits.
+End of turn 6: served 0 | unhappy departures 0 | revenue $0.00 | paid average N/A | turns used 6
+Customer 3 arrives and joins the queue.
+
+===== Turn 7 / 18 =====
+Revenue: $0.00 | Paid: 0 | Paid average: N/A
+Waiting queue: C1, C2, C3
+Table 1: free
+Table 2: free
+C1 (Regular) | satisfaction: 52 | QUEUED | order: none
+C2 (VIP) | satisfaction: 85 | QUEUED | order: none
+C3 (Regular) | satisfaction: 100 | QUEUED | order: none
+Waiter: available (seat / order / serve / wait)
+Chef: available (cook one order / wait)
+Cashier: available (automatic payment)
+Served: 0 | Unhappy departures: 0
+Waiter> Waiter waits.
+Chef> Chef waits.
+End of turn 7: served 0 | unhappy departures 0 | revenue $0.00 | paid average N/A | turns used 7
+
+===== Turn 8 / 18 =====
+Revenue: $0.00 | Paid: 0 | Paid average: N/A
+Waiting queue: C1, C2, C3
+Table 1: free
+Table 2: free
+C1 (Regular) | satisfaction: 44 | QUEUED | order: none
+C2 (VIP) | satisfaction: 80 | QUEUED | order: none
+C3 (Regular) | satisfaction: 92 | QUEUED | order: none
+Waiter: available (seat / order / serve / wait)
+Chef: available (cook one order / wait)
+Cashier: available (automatic payment)
+Served: 0 | Unhappy departures: 0
+Waiter> Waiter waits.
+Chef> Chef waits.
+End of turn 8: served 0 | unhappy departures 0 | revenue $0.00 | paid average N/A | turns used 8
+
+===== Turn 9 / 18 =====
+Revenue: $0.00 | Paid: 0 | Paid average: N/A
+Waiting queue: C1, C2, C3
+Table 1: free
+Table 2: free
+C1 (Regular) | satisfaction: 36 | QUEUED | order: none
+C2 (VIP) | satisfaction: 75 | QUEUED | order: none
+C3 (Regular) | satisfaction: 84 | QUEUED | order: none
+Waiter: available (seat / order / serve / wait)
+Chef: available (cook one order / wait)
+Cashier: available (automatic payment)
+Served: 0 | Unhappy departures: 0
+Waiter> Waiter waits.
+Chef> Chef waits.
+End of turn 9: served 0 | unhappy departures 0 | revenue $0.00 | paid average N/A | turns used 9
+Customer 4 arrives and joins the queue.
+
+===== Turn 10 / 18 =====
+Revenue: $0.00 | Paid: 0 | Paid average: N/A
+Waiting queue: C1, C2, C3, C4
+Table 1: free
+Table 2: free
+C1 (Regular) | satisfaction: 28 | QUEUED | order: none
+C2 (VIP) | satisfaction: 70 | QUEUED | order: none
+C3 (Regular) | satisfaction: 76 | QUEUED | order: none
+C4 (Critic) | satisfaction: 100 | QUEUED | order: none
+Waiter: available (seat / order / serve / wait)
+Chef: available (cook one order / wait)
+Cashier: available (automatic payment)
+Served: 0 | Unhappy departures: 0
+Waiter> Waiter waits.
+Chef> Chef waits.
+End of turn 10: served 0 | unhappy departures 0 | revenue $0.00 | paid average N/A | turns used 10
+
+===== Turn 11 / 18 =====
+Revenue: $0.00 | Paid: 0 | Paid average: N/A
+Waiting queue: C1, C2, C3, C4
+Table 1: free
+Table 2: free
+C1 (Regular) | satisfaction: 20 | QUEUED | order: none
+C2 (VIP) | satisfaction: 65 | QUEUED | order: none
+C3 (Regular) | satisfaction: 68 | QUEUED | order: none
+C4 (Critic) | satisfaction: 88 | QUEUED | order: none
+Waiter: available (seat / order / serve / wait)
+Chef: available (cook one order / wait)
+Cashier: available (automatic payment)
+Served: 0 | Unhappy departures: 0
+Waiter> Waiter waits.
+Chef> Chef waits.
+End of turn 11: served 0 | unhappy departures 0 | revenue $0.00 | paid average N/A | turns used 11
+
+===== Turn 12 / 18 =====
+Revenue: $0.00 | Paid: 0 | Paid average: N/A
+Waiting queue: C1, C2, C3, C4
+Table 1: free
+Table 2: free
+C1 (Regular) | satisfaction: 12 | QUEUED | order: none
+C2 (VIP) | satisfaction: 60 | QUEUED | order: none
+C3 (Regular) | satisfaction: 60 | QUEUED | order: none
+C4 (Critic) | satisfaction: 76 | QUEUED | order: none
+Waiter: available (seat / order / serve / wait)
+Chef: available (cook one order / wait)
+Cashier: available (automatic payment)
+Served: 0 | Unhappy departures: 0
+Waiter> Waiter waits.
+Chef> Chef waits.
+End of turn 12: served 0 | unhappy departures 0 | revenue $0.00 | paid average N/A | turns used 12
+Customer 5 arrives and joins the queue.
+
+===== Turn 13 / 18 =====
+Revenue: $0.00 | Paid: 0 | Paid average: N/A
+Waiting queue: C1, C2, C3, C4, C5
+Table 1: free
+Table 2: free
+C1 (Regular) | satisfaction: 4 | QUEUED | order: none
+C2 (VIP) | satisfaction: 55 | QUEUED | order: none
+C3 (Regular) | satisfaction: 52 | QUEUED | order: none
+C4 (Critic) | satisfaction: 64 | QUEUED | order: none
+C5 (Regular) | satisfaction: 100 | QUEUED | order: none
+Waiter: available (seat / order / serve / wait)
+Chef: available (cook one order / wait)
+Cashier: available (automatic payment)
+Served: 0 | Unhappy departures: 0
+Waiter> Waiter waits.
+Chef> Chef waits.
+Customer 1 leaves unhappy. Any unfinished order is cancelled and the table is freed.
+End of turn 13: served 0 | unhappy departures 1 | revenue $0.00 | paid average N/A | turns used 13
+
+===== Turn 14 / 18 =====
+Revenue: $0.00 | Paid: 0 | Paid average: N/A
+Waiting queue: C2, C3, C4, C5
+Table 1: free
+Table 2: free
+C1 (Regular) | satisfaction: 0 | LEFT | order: none
+C2 (VIP) | satisfaction: 50 | QUEUED | order: none
+C3 (Regular) | satisfaction: 44 | QUEUED | order: none
+C4 (Critic) | satisfaction: 52 | QUEUED | order: none
+C5 (Regular) | satisfaction: 92 | QUEUED | order: none
+Waiter: available (seat / order / serve / wait)
+Chef: available (cook one order / wait)
+Cashier: available (automatic payment)
+Served: 0 | Unhappy departures: 1
+Waiter> Waiter waits.
+Chef> Chef waits.
+End of turn 14: served 0 | unhappy departures 1 | revenue $0.00 | paid average N/A | turns used 14
+
+===== Turn 15 / 18 =====
+Revenue: $0.00 | Paid: 0 | Paid average: N/A
+Waiting queue: C2, C3, C4, C5
+Table 1: free
+Table 2: free
+C1 (Regular) | satisfaction: 0 | LEFT | order: none
+C2 (VIP) | satisfaction: 45 | QUEUED | order: none
+C3 (Regular) | satisfaction: 36 | QUEUED | order: none
+C4 (Critic) | satisfaction: 40 | QUEUED | order: none
+C5 (Regular) | satisfaction: 84 | QUEUED | order: none
+Waiter: available (seat / order / serve / wait)
+Chef: available (cook one order / wait)
+Cashier: available (automatic payment)
+Served: 0 | Unhappy departures: 1
+Waiter> Waiter waits.
+Chef> Chef waits.
+End of turn 15: served 0 | unhappy departures 1 | revenue $0.00 | paid average N/A | turns used 15
+Customer 6 arrives and joins the queue.
+
+===== Turn 16 / 18 =====
+Revenue: $0.00 | Paid: 0 | Paid average: N/A
+Waiting queue: C2, C3, C4, C5, C6
+Table 1: free
+Table 2: free
+C1 (Regular) | satisfaction: 0 | LEFT | order: none
+C2 (VIP) | satisfaction: 40 | QUEUED | order: none
+C3 (Regular) | satisfaction: 28 | QUEUED | order: none
+C4 (Critic) | satisfaction: 28 | QUEUED | order: none
+C5 (Regular) | satisfaction: 76 | QUEUED | order: none
+C6 (Regular) | satisfaction: 100 | QUEUED | order: none
+Waiter: available (seat / order / serve / wait)
+Chef: available (cook one order / wait)
+Cashier: available (automatic payment)
+Served: 0 | Unhappy departures: 1
+Waiter> Waiter waits.
+Chef> Chef waits.
+End of turn 16: served 0 | unhappy departures 1 | revenue $0.00 | paid average N/A | turns used 16
+
+===== Turn 17 / 18 =====
+Revenue: $0.00 | Paid: 0 | Paid average: N/A
+Waiting queue: C2, C3, C4, C5, C6
+Table 1: free
+Table 2: free
+C1 (Regular) | satisfaction: 0 | LEFT | order: none
+C2 (VIP) | satisfaction: 35 | QUEUED | order: none
+C3 (Regular) | satisfaction: 20 | QUEUED | order: none
+C4 (Critic) | satisfaction: 16 | QUEUED | order: none
+C5 (Regular) | satisfaction: 68 | QUEUED | order: none
+C6 (Regular) | satisfaction: 92 | QUEUED | order: none
+Waiter: available (seat / order / serve / wait)
+Chef: available (cook one order / wait)
+Cashier: available (automatic payment)
+Served: 0 | Unhappy departures: 1
+Waiter> Waiter waits.
+Chef> Chef waits.
+End of turn 17: served 0 | unhappy departures 1 | revenue $0.00 | paid average N/A | turns used 17
+
+===== Turn 18 / 18 =====
+Revenue: $0.00 | Paid: 0 | Paid average: N/A
+Waiting queue: C2, C3, C4, C5, C6
+Table 1: free
+Table 2: free
+C1 (Regular) | satisfaction: 0 | LEFT | order: none
+C2 (VIP) | satisfaction: 30 | QUEUED | order: none
+C3 (Regular) | satisfaction: 12 | QUEUED | order: none
+C4 (Critic) | satisfaction: 4 | QUEUED | order: none
+C5 (Regular) | satisfaction: 60 | QUEUED | order: none
+C6 (Regular) | satisfaction: 84 | QUEUED | order: none
+Waiter: available (seat / order / serve / wait)
+Chef: available (cook one order / wait)
+Cashier: available (automatic payment)
+Served: 0 | Unhappy departures: 1
+Waiter> Waiter waits.
+Chef> Chef waits.
+Customer 4 leaves unhappy. Any unfinished order is cancelled and the table is freed.
+End of turn 18: served 0 | unhappy departures 2 | revenue $0.00 | paid average N/A | turns used 18
+
+===== Game over =====
+Turns used: 18
+Served: 0 | Paid: 0 | Unhappy departures: 2
+Revenue: $0.00
+Average satisfaction of paid customers: N/A
+DEFEAT
