@@ -3,26 +3,21 @@ package restaurantrush;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.IntFunction;
 
-/**
- * Owner D. Checks how the mixed Stage 2 arrivals are wired into the game: who arrives and when,
- * what the screen shows, and that the default game is still Stage 1. These scenarios use only the
- * arrival factory, the controller and the screen, so they do not depend on the VIP and Critic rules
- * (owner A) or the locked bills (owner B). Run it by hand:
- * java -cp out/main:out/test restaurantrush.Stage2ControllerTests
- *
- * The complete Stage 2 victory and defeat games need A's and B's rules, so they are added after
- * those are merged, with results taken from a real run.
- */
+/** Mixed arrivals, stage selection, UI and complete 18-turn Stage 2 games. */
 public final class Stage2ControllerTests {
     private static final String NL = System.lineSeparator();
     private static final int[] ARRIVAL_TURNS = {1, 4, 7, 10, 13, 16};
     private static int passed;
-    private static final int TOTAL = 7;
+    private static final int TOTAL = 10;
 
     private Stage2ControllerTests() { }
 
@@ -38,6 +33,9 @@ public final class Stage2ControllerTests {
         testDefaultGameStaysStage1();
         testInvalidInputInTheStage2GameDoesNotUseTheTask();
         testMissingSettingsAreRejected();
+        testMixedVictory();
+        testMixedDefeat();
+        testLaunchOptions();
         System.out.println("PASS " + passed + "/" + TOTAL + " Stage 2 controller scenarios");
     }
 
@@ -127,15 +125,84 @@ public final class Stage2ControllerTests {
         passed++;
     }
 
+    private static void testMixedVictory() {
+        Restaurant restaurant = new Restaurant();
+        String text = play(fixture("victory"), "Stage 2", Stage2Arrivals::create, restaurant);
+        check(restaurant.getTurn() == 18 && restaurant.getCustomers().size() == 6,
+                "victory must use all 18 turns and six mixed arrivals");
+        check(restaurant.getCashier().getPaidCount() == 4, "only paid customers count");
+        check(restaurant.getCashier().getRevenueCents() == 5850, "VIP discount must reach collected revenue");
+        check(restaurant.getCashier().getAverageSatisfaction() == 75.5, "record actual payment satisfaction");
+        check(restaurant.findCustomer(4).getOrder().getItem().getName().equals("Pasta"), "Critic orders Pasta");
+        check(text.contains("C4 (Critic)") && text.contains("VICTORY"), "show Critic and victory");
+        check(!text.contains("Invalid choice:") && !text.contains("Not implemented:"), "valid replay must finish cleanly");
+        passed++;
+    }
+
+    private static void testMixedDefeat() {
+        Restaurant restaurant = new Restaurant();
+        String text = play(fixture("defeat"), "Stage 2", Stage2Arrivals::create, restaurant);
+        check(restaurant.getTurn() == 18 && restaurant.getCustomers().size() == 6,
+                "defeat must still use all turns and arrivals");
+        check(restaurant.getCashier().getPaidCount() == 0 && restaurant.getCashier().getRevenueCents() == 0,
+                "waiting without payment must not earn income");
+        check(restaurant.getUnhappyDepartures() == 2, "waiting customers leave at zero satisfaction");
+        check(restaurant.findCustomer(4).getState() == CustomerState.LEFT, "Critic's faster loss causes abandonment");
+        check(text.contains("DEFEAT") && text.contains("N/A"), "no payments means defeat and no average");
+        check(!text.contains("Invalid choice:") && !text.contains("Not implemented:"), "defeat replay finishes cleanly");
+        passed++;
+    }
+
+    private static void testLaunchOptions() {
+        check(launch(0, "--stage2", "--check").contains("Restaurant Rush - Stage 2"), "stage2 flag selects Stage 2");
+        check(launch(0, "--check").contains("Restaurant Rush - Stage 1"), "default stays Stage 1");
+        check(launch(0, "--help").contains("--stage2"), "help documents the new option");
+        check(launch(2, "--unknown").contains("Usage:"), "unknown flags fail");
+        check(launch(2, "--check", "--help").contains("Usage:"), "conflicting flags fail");
+        passed++;
+    }
+
+    private static String fixture(String name) {
+        try {
+            return Files.readString(Path.of("src/test/resources/stage2-" + name + ".input.txt"));
+        } catch (IOException error) {
+            throw new UncheckedIOException(error);
+        }
+    }
+
+    private static String launch(int expectedExit, String... args) {
+        List<String> command = new ArrayList<>(List.of(
+                Path.of(System.getProperty("java.home"), "bin", "java").toString(),
+                "-cp", System.getProperty("java.class.path"), "restaurantrush.Main"));
+        command.addAll(List.of(args));
+        try {
+            Process process = new ProcessBuilder(command).redirectErrorStream(true).start();
+            process.getOutputStream().close();
+            String text = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+            check(process.waitFor() == expectedExit, "launch exit status for " + command);
+            return text;
+        } catch (IOException error) {
+            throw new UncheckedIOException(error);
+        } catch (InterruptedException error) {
+            Thread.currentThread().interrupt();
+            throw new AssertionError("CLI test interrupted", error);
+        }
+    }
+
     private static String allWait() {
         return "start\n" + "wait\nwait\n".repeat(18);
     }
 
     private static String play(String commands, String stageLabel, IntFunction<Customer> arrivalFactory) {
+        return play(commands, stageLabel, arrivalFactory, new Restaurant());
+    }
+
+    private static String play(String commands, String stageLabel, IntFunction<Customer> arrivalFactory,
+            Restaurant restaurant) {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         ConsoleUI ui = new ConsoleUI(new ByteArrayInputStream(commands.getBytes(StandardCharsets.UTF_8)),
                 new PrintStream(output, true, StandardCharsets.UTF_8), stageLabel);
-        new GameController(new Restaurant(), ui, arrivalFactory).run();
+        new GameController(restaurant, ui, arrivalFactory).run();
         return output.toString(StandardCharsets.UTF_8);
     }
 
