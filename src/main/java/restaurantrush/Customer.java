@@ -44,9 +44,22 @@ public abstract class Customer {
         }
     }
 
+    /** Restore satisfaction only for customers still waiting for a table or food. */
+    public void restoreWaitingSatisfaction(int amount) {
+        if (amount < 0) {
+            throw new IllegalArgumentException("Recovery amount cannot be negative.");
+        }
+        if (state == CustomerState.QUEUED || state == CustomerState.SEATED) {
+            satisfaction = (int) Math.min(100L, (long) satisfaction + amount);
+        }
+    }
+
     public MenuItem chooseMeal(Menu menu) {
         if (menu == null) {
             throw new IllegalArgumentException("Menu is required.");
+        }
+        if (id == 5 && menu.hasCombo()) {
+            return menu.getCombo();
         }
         String itemName = switch ((id - 1) % 3) {
             case 0 -> "Salad";
