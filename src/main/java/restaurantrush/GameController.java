@@ -3,10 +3,14 @@ package restaurantrush;
 import java.util.Comparator;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.function.BiConsumer;
 import java.util.function.IntFunction;
 
 /** Owner D. Runs the 18-turn game; asks the staff and customers to do the work and prints nothing itself. */
 public final class GameController {
+    /** Satisfaction a waiting customer regains at the start of each Happy Hour turn. */
+    private static final int HAPPY_HOUR_RECOVERY = 15;
+
     private final Restaurant restaurant;
     private final ConsoleUI ui;
     private final IntFunction<Customer> arrivalFactory;
@@ -74,6 +78,11 @@ public final class GameController {
             resetStaffActions();
             processArrivals();
             ui.showTurnState(restaurant);
+            if (restaurant.isStage3Enabled()) {
+                processHappyHourChoice();
+                restoreWaitingCustomers();
+                processHostChoice();
+            }
             processWaiterChoice();
             processChefChoice();
             processEatingAndPayments();
@@ -91,6 +100,82 @@ public final class GameController {
         }
     }
 
+    /** Stage 3 only. Until Happy Hour is used, the manager may start it or let the turn go by. */
+    private void processHappyHourChoice() {
+        HappyHourPolicy policy = restaurant.getHappyHour();
+        while (!policy.hasActivated()) {
+            String[] words = readWords("Manager> ");
+            try {
+                switch (words[0]) {
+                    case "" -> throw new IllegalArgumentException("Please type a command.");
+                    case "wait" -> {
+                        expectWords(words, 1, "wait");
+                        ui.showMessage("Manager keeps Happy Hour for later.");
+                        return;
+                    }
+                    case "happyhour" -> {
+                        expectWords(words, 1, "happyhour");
+                        policy.activate(restaurant.getTurn());
+                        ui.showMessage("Manager starts Happy Hour. It lasts this turn and the next.");
+                    }
+                    case "status" -> ui.showTurnState(restaurant);
+                    case "help" -> ui.showHelp();
+                    default -> throw new IllegalArgumentException("Unknown Manager command \"" + words[0]
+                            + "\". Try happyhour or wait.");
+                }
+            } catch (IllegalArgumentException | IllegalStateException error) {
+                ui.showMessage("Invalid choice: " + error.getMessage() + " Please choose again.");
+            }
+        }
+    }
+
+    /** Stage 3 only. Called once per turn, so a retry or a status command can never recover twice. */
+    private void restoreWaitingCustomers() {
+        if (!restaurant.getHappyHour().isActive(restaurant.getTurn())) {
+            return;
+        }
+        for (Customer customer : restaurant.getCustomers()) {
+            customer.restoreWaitingSatisfaction(HAPPY_HOUR_RECOVERY);
+        }
+        ui.showMessage("Happy Hour: waiting customers recover " + HAPPY_HOUR_RECOVERY + " satisfaction.");
+        ui.showTurnState(restaurant);
+    }
+
+    /** Stage 3 only. The Host seats at most one queued customer, on top of whatever the Waiter does. */
+    private void processHostChoice() {
+        Host host = restaurant.getHost();
+        while (!host.hasActed()) {
+            String[] words = readWords("Host> ");
+            try {
+                switch (words[0]) {
+                    case "" -> throw new IllegalArgumentException("Please type a command.");
+                    case "wait" -> {
+                        expectWords(words, 1, "wait");
+                        host.skipTurn();
+                        ui.showMessage("Host waits.");
+                    }
+                    case "seat" -> seatQueuedCustomer(words, host::seat, "Host");
+                    case "status" -> ui.showTurnState(restaurant);
+                    case "help" -> ui.showHelp();
+                    default -> throw new IllegalArgumentException("Unknown Host command \"" + words[0]
+                            + "\". Try seat <customerId> <tableNo> or wait.");
+                }
+            } catch (IllegalArgumentException | IllegalStateException error) {
+                ui.showMessage("Invalid choice: " + error.getMessage() + " The task is not used. Please choose again.");
+            }
+        }
+    }
+
+    /** The Host and the Waiter seat the same way, so both prompts share this. The staff member does the checking. */
+    private void seatQueuedCustomer(String[] words, BiConsumer<Customer, Table> seater, String who) {
+        expectWords(words, 3, "seat <customerId> <tableNo>");
+        Customer customer = restaurant.findQueuedCustomer(parseNumber(words[1], "customer ID"));
+        Table table = restaurant.findTable(parseNumber(words[2], "table number"));
+        seater.accept(customer, table);
+        restaurant.removeFromQueue(customer);
+        ui.showMessage(who + " seats customer " + customer.getId() + " at table " + table.getNumber() + ".");
+    }
+
     private void processWaiterChoice() {
         Waiter waiter = restaurant.getWaiter();
         while (!waiter.hasActed()) {
@@ -104,17 +189,14 @@ public final class GameController {
                         ui.showMessage("Waiter waits.");
                     }
                     case "seat" -> {
-                        expectWords(words, 3, "seat <customerId> <tableNo>");
-                        Customer customer = restaurant.findQueuedCustomer(parseNumber(words[1], "customer ID"));
-                        Table table = restaurant.findTable(parseNumber(words[2], "table number"));
-                        waiter.seat(customer, table);
-                        restaurant.removeFromQueue(customer);
-                        ui.showMessage("Waiter seats customer " + customer.getId() + " at table " + table.getNumber() + ".");
+                        seatQueuedCustomer(words, waiter::seat, "Waiter");
                     }
                     case "order" -> {
                         expectWords(words, 2, "order <customerId>");
                         Customer customer = restaurant.findCustomer(parseNumber(words[1], "customer ID"));
-                        Order order = waiter.takeOrder(customer, restaurant.getMenu());
+                        Order order = restaurant.isStage3Enabled()
+                                ? waiter.takeOrder(customer, restaurant.getMenu(), restaurant.getHappyHour(), restaurant.getTurn())
+                                : waiter.takeOrder(customer, restaurant.getMenu());
                         restaurant.addOrder(order);
                         ui.showOrderTaken(order);
                     }
@@ -205,6 +287,9 @@ public final class GameController {
         restaurant.getWaiter().resetTurn();
         restaurant.getChef().resetTurn();
         restaurant.getCashier().resetTurn();
+        if (restaurant.isStage3Enabled()) {
+            restaurant.getHost().resetTurn();
+        }
     }
 
     private boolean checkVictory() {
