@@ -19,6 +19,16 @@ public final class Order {
         this.lockedPriceCents = this.customer.priceFor(this.item);
     }
 
+    /** Stage 3: the caller has already obtained the final, policy-adjusted quote. */
+    public Order(Customer customer, MenuItem item, int lockedPriceCents) {
+        this.customer = Objects.requireNonNull(customer, "customer");
+        this.item = Objects.requireNonNull(item, "item");
+        if (lockedPriceCents < 0) {
+            throw new IllegalArgumentException("Locked price cannot be negative.");
+        }
+        this.lockedPriceCents = lockedPriceCents;
+    }
+
     public Customer getCustomer() { return customer; }
     public MenuItem getItem() { return item; }
     public int getLockedPriceCents() { return lockedPriceCents; }
