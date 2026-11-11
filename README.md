@@ -49,8 +49,41 @@ Repository: https://github.com/Ziru815/SC2002-RestaurantRush
 | Stage/transition | Evidence |
 | --- | --- |
 | Stage 1 | Fixed `stage-1` tag; replay inputs and results in docs/evidence/stage1 |
-| 1 -> 2 | Added VIPCustomer, CriticCustomer, Stage2Arrivals, customer extension/Stage 2 tests and replay inputs. Changed Customer pricing/type hooks, Order lock-at-placement, Waiter/Chef validation, controller/UI/Main stage setup and test scripts. No Stage 1 production classes deleted. [Immutable code comparison](https://github.com/Ziru815/SC2002-RestaurantRush/compare/8d7fa09ddae3053f97f9a7ebe9738f3335740133...2ece569a68a1ed92d3aaa1b05bc14c60cc851b79). |
+| 1 -> 2 | Tag `stage-2`. Files added and changed, with reasons, in [Stage 1 to Stage 2](#stage-1-to-stage-2) below. |
 | 2 -> 3 | Pending; retain Stage 2 before adding Stage 3 features. |
+
+## Stage 1 to Stage 2
+
+Compare: [`stage-1...stage-2`](https://github.com/Ziru815/SC2002-RestaurantRush/compare/8d7fa09ddae3053f97f9a7ebe9738f3335740133...93fc50663056681469000208941ace992ccbb5a0) (tag commits `8d7fa09` to `93fc506`).
+
+Stage 2 adds VIP and Critic customers. Each new type is a subclass of `Customer` that overrides the behaviour it changes, so the controller never checks a customer's type.
+
+New production files:
+
+| File | Purpose |
+| --- | --- |
+| `VIPCustomer.java` | Pays 90% of the menu price and loses 5 satisfaction per waiting turn. |
+| `CriticCustomer.java` | Always chooses Pasta, pays full price and loses 12 satisfaction per waiting turn. |
+| `Stage2Arrivals.java` | Builds the six arrivals for Stage 2: ID 2 is VIP, ID 4 is Critic, the others are Regular. |
+
+Existing files changed:
+
+| File | Change | Reason |
+| --- | --- | --- |
+| `Customer.java` | Added `priceFor(item)` and `getTypeLabel()`. | Gives each customer type a method to override for its price, and a label for the screen only. Regular behaviour is unchanged. |
+| `Order.java` | The bill is now `customer.priceFor(item)`, saved once when the order is created. | Moves the discount to the customer object and locks the price at order time, as the brief requires. Stage 1 bills stay the same because Regular customers pay the menu price. |
+| `Cashier.java` | Comments only. | Records that payment uses the locked bill and never applies a discount a second time. |
+| `Waiter.java`, `Chef.java` | Extra checks that the customer still holds the table and still owns the order. | Stops an order for a customer who left or moved from being taken, cooked or served. Rejected actions still do not use the staff member's turn. |
+| `GameController.java` | Takes an arrival factory (`IntFunction<Customer>`); the old two-argument constructor still creates Regular customers. | Lets each stage choose who arrives without the controller knowing the customer types. |
+| `ConsoleUI.java` | Takes a stage label for the title and shows each customer's type outside Stage 1. | Display only; the screen makes no game decisions from the type. |
+| `Main.java` | Added `--stage2`. With no option the game is Stage 1. | Keeps Stage 1 playable on its own, as the brief requires. |
+| `scripts/test.sh` | Runs the five new test suites. `scripts/test-stage2.sh` is new and calls `test.sh`. | One command runs every check for both stages. |
+
+Tests added: `CustomerExtensionTests`, `Stage2CustomerTests`, `Stage2OrderTests`, `Stage2StaffTests`, `Stage2ControllerTests`, and the replay inputs `stage2-victory.input.txt` and `stage2-defeat.input.txt`.
+
+Deleted: no production or test files. Internal planning notes under `docs/superpowers/` were removed because they were working notes, not part of the submission.
+
+Stage 1 still works: `sh scripts/run.sh` with no option plays the Stage 1 game, and its four original test suites still pass in `sh scripts/test.sh`.
 
 The old README at the immutable Stage 1 tag still says skeleton; these current notes correct that stale description without moving the tag. A final report and accurate diagrams remain separate deliverables.
 
