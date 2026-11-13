@@ -52,6 +52,8 @@ Repository: https://github.com/Ziru815/SC2002-RestaurantRush
 | 1 -> 2 | Added VIPCustomer, CriticCustomer, Stage2Arrivals, customer extension/Stage 2 tests and replay inputs. Changed Customer pricing/type hooks, Order lock-at-placement, Waiter/Chef validation, controller/UI/Main stage setup and test scripts. No Stage 1 production classes deleted. [Immutable code comparison](https://github.com/Ziru815/SC2002-RestaurantRush/compare/8d7fa09ddae3053f97f9a7ebe9738f3335740133...2ece569a68a1ed92d3aaa1b05bc14c60cc851b79). |
 | 2 -> 3 | Pending; retain Stage 2 before adding Stage 3 features. |
 
+Sequence diagram (Stage 2): [docs/Stage2SequenceDiagram.png](docs/Stage2SequenceDiagram.png). One manager playthrough with `--stage2`, from arrival and VIP order pricing through serving, payment and the final result check.
+
 The old README at the immutable Stage 1 tag still says skeleton; these current notes correct that stale description without moving the tag. A final report and accurate diagrams remain separate deliverables.
 
 Scaffold and verification were prepared with AI assistance at Ziru's request. Each member must understand, test and explain their own changes, record actual assistance, retain full required AI histories and complete the course declarations. The scaffold is not four members' completed implementations.
