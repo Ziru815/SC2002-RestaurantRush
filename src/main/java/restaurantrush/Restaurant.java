@@ -11,13 +11,29 @@ public final class Restaurant {
     private final Queue<Customer> waitingQueue = new ArrayDeque<>();
     private final List<Customer> customers = new ArrayList<>();
     private final List<Order> activeOrders = new ArrayList<>();
-    private final Menu menu = new Menu();
+    private final Menu menu;
     private final Waiter waiter = new Waiter();
     private final Chef chef = new Chef();
     private final Cashier cashier = new Cashier();
+    private final boolean stage3Enabled;
+    private final Host host;
+    private final HappyHourPolicy happyHour;
     private int turn;
     private int servedCount;
     private int unhappyDepartures;
+
+    /** Stage 1 and 2 setup: three dishes, no Host, no Happy Hour. */
+    public Restaurant() {
+        this(false);
+    }
+
+    /** Stage 3 setup adds the combo to the menu, one Host and one Happy Hour policy. */
+    public Restaurant(boolean stage3Enabled) {
+        this.stage3Enabled = stage3Enabled;
+        this.menu = new Menu(stage3Enabled);
+        this.host = stage3Enabled ? new Host() : null;
+        this.happyHour = stage3Enabled ? new HappyHourPolicy() : null;
+    }
 
     public List<Table> getTables() { return tables; }
     public List<Customer> getWaitingQueue() { return List.copyOf(waitingQueue); }
@@ -27,6 +43,18 @@ public final class Restaurant {
     public Waiter getWaiter() { return waiter; }
     public Chef getChef() { return chef; }
     public Cashier getCashier() { return cashier; }
+    public boolean isStage3Enabled() { return stage3Enabled; }
+
+    public Host getHost() {
+        requireStage3("Host");
+        return host;
+    }
+
+    public HappyHourPolicy getHappyHour() {
+        requireStage3("Happy Hour");
+        return happyHour;
+    }
+
     public int getTurn() { return turn; }
     public int getServedCount() { return servedCount; }
     public int getUnhappyDepartures() { return unhappyDepartures; }
@@ -124,5 +152,11 @@ public final class Restaurant {
         }
         waitingQueue.remove(customer);
         unhappyDepartures++;
+    }
+
+    private void requireStage3(String what) {
+        if (!stage3Enabled) {
+            throw new IllegalStateException(what + " only exists in Stage 3.");
+        }
     }
 }

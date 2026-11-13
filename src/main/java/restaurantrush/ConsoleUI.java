@@ -12,6 +12,7 @@ public final class ConsoleUI {
     private final Scanner input;
     private final PrintStream output;
     private static final String STAGE_1 = "Stage 1";
+    private static final String STAGE_3 = "Stage 3";
 
     private final String stageLabel;
 
@@ -56,6 +57,10 @@ public final class ConsoleUI {
         output.println("Before the game: status | menu | tasks | help | start | quit");
         output.println("Waiter: seat <customerId> <tableNo> | order <customerId> | serve <customerId> | wait");
         output.println("Chef:   cook <customerId> | wait");
+        if (STAGE_3.equals(stageLabel)) {
+            output.println("Manager: happyhour | wait (only until Happy Hour has been used)");
+            output.println("Host:   seat <customerId> <tableNo> | wait");
+        }
         output.println("In any prompt: status shows the restaurant again; help shows this list.");
     }
 
@@ -89,10 +94,29 @@ public final class ConsoleUI {
             output.println("C" + customer.getId() + typeTag(customer) + " | satisfaction: " + customer.getSatisfaction()
                     + " | " + customer.getState() + " | order: " + describeOrder(customer.getOrder()));
         }
+        if (restaurant.isStage3Enabled()) {
+            output.println("Host: " + availability(restaurant.getHost()) + " (seat one queued customer / wait)");
+        }
         output.println("Waiter: " + availability(restaurant.getWaiter()) + " (seat / order / serve / wait)");
         output.println("Chef: " + availability(restaurant.getChef()) + " (cook one order / wait)");
         output.println("Cashier: " + availability(cashier) + " (automatic payment)");
         output.println("Served: " + restaurant.getServedCount() + " | Unhappy departures: " + restaurant.getUnhappyDepartures());
+        if (restaurant.isStage3Enabled()) {
+            showHappyHour(restaurant.getHappyHour(), restaurant.getTurn());
+        }
+    }
+
+    /** Happy Hour is unused, running with some turns left, or finished. */
+    public void showHappyHour(HappyHourPolicy policy, int turn) {
+        if (!policy.hasActivated()) {
+            output.println("Happy Hour: not used yet (once per game, lasts 2 turns, 20% off new orders, "
+                    + "waiting customers recover 15 satisfaction each turn)");
+        } else if (policy.isActive(turn)) {
+            int left = policy.remainingTurns(turn);
+            output.println("Happy Hour: ACTIVE, " + left + (left == 1 ? " turn" : " turns") + " left including this one");
+        } else {
+            output.println("Happy Hour: used and finished");
+        }
     }
 
     public void showMessage(String text) { output.println(text); }
