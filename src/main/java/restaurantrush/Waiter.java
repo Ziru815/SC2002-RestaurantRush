@@ -20,6 +20,32 @@ public final class Waiter extends Staff {
     }
 
     public Order takeOrder(Customer customer, Menu menu) {
+        MenuItem item = chooseOrderItem(customer, menu);
+        Order order = new Order(customer, item);
+        customer.placeOrder(order);
+        markActed();
+        return order;
+    }
+
+    /** Stage 3: quote once through the policy and lock that final bill. */
+    public Order takeOrder(Customer customer, Menu menu, HappyHourPolicy policy, int turn) {
+        requireAvailable();
+        if (policy == null) {
+            throw new IllegalArgumentException("Happy Hour policy is required.");
+        }
+        if (turn < 1 || turn > GameConfig.MAX_TURNS) {
+            throw new IllegalArgumentException("Turn must be between 1 and " + GameConfig.MAX_TURNS + ".");
+        }
+        MenuItem item = chooseOrderItem(customer, menu);
+        int finalPriceCents = policy.quote(customer, item, turn);
+        Order order = new Order(customer, item, finalPriceCents);
+        customer.placeOrder(order);
+        markActed();
+        return order;
+    }
+
+    /** Shared preconditions keep both ordering paths compatible. */
+    private MenuItem chooseOrderItem(Customer customer, Menu menu) {
         requireAvailable();
         if (customer == null || menu == null) {
             throw new IllegalArgumentException("Customer and menu are required.");
@@ -38,10 +64,7 @@ public final class Waiter extends Staff {
         if (item == null) {
             throw new IllegalStateException("Customer did not choose a menu item.");
         }
-        Order order = new Order(customer, item);
-        customer.placeOrder(order);
-        markActed();
-        return order;
+        return item;
     }
 
     public void serve(Order order, int turn) {
