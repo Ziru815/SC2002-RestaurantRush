@@ -52,6 +52,8 @@ Repository: https://github.com/Ziru815/SC2002-RestaurantRush
 | 1 -> 2 | Tag `stage-2`. Files added and changed, with reasons, in [Stage 1 to Stage 2](#stage-1-to-stage-2) below. |
 | 2 -> 3 | Pending; retain Stage 2 before adding Stage 3 features. |
 
+Sequence diagram (Stage 2): [docs/Stage2SequenceDiagram.png](docs/Stage2SequenceDiagram.png). One manager playthrough with `--stage2`, from arrival and VIP order pricing through serving, payment and the final result check.
+
 ## Stage 1 to Stage 2
 
 Compare: [`stage-1...stage-2`](https://github.com/Ziru815/SC2002-RestaurantRush/compare/8d7fa09ddae3053f97f9a7ebe9738f3335740133...93fc50663056681469000208941ace992ccbb5a0) (tag commits `8d7fa09` to `93fc506`).
@@ -73,7 +75,7 @@ Existing files changed:
 | `Customer.java` | Added `priceFor(item)` and `getTypeLabel()`. | Gives each customer type a method to override for its price, and a label for the screen only. Regular behaviour is unchanged. |
 | `Order.java` | The bill is now `customer.priceFor(item)`, saved once when the order is created. | Moves the discount to the customer object and locks the price at order time, as the brief requires. Stage 1 bills stay the same because Regular customers pay the menu price. |
 | `Cashier.java` | Comments only. | Records that payment uses the locked bill and never applies a discount a second time. |
-| `Waiter.java`, `Chef.java` | Extra checks that the customer still holds the table and still owns the order. | Stops an order for a customer who left or moved from being taken, cooked or served. Rejected actions still do not use the staff member's turn. |
+| `Waiter.java`, `Chef.java` | Waiter checks table occupancy when taking/serving orders; Chef checks that the customer is seated and still owns the order. | Rejects invalid actions without using a staff task. |
 | `GameController.java` | Takes an arrival factory (`IntFunction<Customer>`); the old two-argument constructor still creates Regular customers. | Lets each stage choose who arrives without the controller knowing the customer types. |
 | `ConsoleUI.java` | Takes a stage label for the title and shows each customer's type outside Stage 1. | Display only; the screen makes no game decisions from the type. |
 | `Main.java` | Added `--stage2`. With no option the game is Stage 1. | Keeps Stage 1 playable on its own, as the brief requires. |
