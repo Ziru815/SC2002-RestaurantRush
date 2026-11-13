@@ -1,64 +1,57 @@
 classDiagram
 direction TB
-%% Stage 3 implementation design, 8 Nov 2026. NOT an as-built diagram.
-%% Baseline: stage-2 / main 93fc50663056681469000208941ace992ccbb5a0.
-%% [NEW]/[CHANGE] notes distinguish planned additions from working Stage 2.
+%% Stage 3 | tag stage-3 | 5172122. Principal types and selected members.
+%% Multiplicities cover all supported modes; Stage 3 has four items, one Host and one HappyHourPolicy.
 class Main {
-    <<class>>
-    + main(args: String[]) void$
+    +main(args: String[]) void$
 }
-note for Main "CHANGE; owner D. Add --stage3; mutually exclusive with --stage2. --stage3 --check / --help work without starting play. / Stage 3 wires Restaurant(true), Stage 2 factory and Stage 3 label. Default launch stays Stage 1."
 class GameConfig {
-    <<class>>
-    +int MAX_TURNS = 18$
-    +int TABLE_COUNT = 2$
+    +int MAX_TURNS$
+    +int TABLE_COUNT$
+    +int MIN_PAID_CUSTOMERS$
+    +int MIN_REVENUE_CENTS$
+    +int MIN_AVERAGE_SATISFACTION$
     +List~Integer~ ARRIVAL_TURNS$
-    +int MIN_PAID_CUSTOMERS = 4$
-    +int MIN_REVENUE_CENTS = 4500$
-    +int MIN_AVERAGE_SATISFACTION = 60$
 }
-note for GameConfig "EXISTING; owner D. Unchanged: 18 turns, 2 tables; arrivals 1/4/7/10/13/16; win paid>=4, revenue>=4500, average>=60."
 class ConsoleUI {
     <<boundary>>
     -Scanner input
     -PrintStream output
     -String stageLabel
-    + ConsoleUI(input: InputStream, output: PrintStream)
-    + ConsoleUI(input: InputStream, output: PrintStream, stageLabel: String)
-    + readCommand() String
-    + readCommand(prompt: String) String
-    + showWelcome() void
-    + showTurnState(r: Restaurant) void
-    + showOrderTaken(o: Order) void
-    + showPayment(c: Customer, cents: int) void
-    + showTurnEnd(r: Restaurant) void
-    + showResult(r: Restaurant, win: boolean) void
+    +ConsoleUI(input: InputStream, output: PrintStream)
+    +ConsoleUI(input: InputStream, output: PrintStream, stageLabel: String)
+    +showWelcome() void
+    +readCommand() String
+    +readCommand(prompt: String) String
+    +showTurnState(restaurant: Restaurant) void
     +showHappyHour(policy: HappyHourPolicy, turn: int) void
+    +showOrderTaken(order: Order) void
+    +showPayment(customer: Customer, cents: int) void
+    +showTurnEnd(restaurant: Restaurant) void
+    +showResult(restaurant: Restaurant, victory: boolean) void
 }
-note for ConsoleUI "CHANGE; owner D. stageLabel remains display-only. Show Host availability, Happy Hour state and duration; no rule calculations. / GameController validates command context; old modes receive no Host/Happy Hour prompts."
 class GameController {
     <<control>>
+    -int HAPPY_HOUR_RECOVERY$
     -Restaurant restaurant
     -ConsoleUI ui
     -IntFunction~Customer~ arrivalFactory
-    + GameController(r: Restaurant, ui: ConsoleUI)
-    + GameController(r: Restaurant, ui: ConsoleUI, arrivalFactory: IntFunction~Customer~)
-    + run() void
-    - processTurn() void
-    - processArrivals() void
-    - processWaiterChoice() void
-    - processChefChoice() void
-    - processEatingAndPayments() void
-    - processWaitingAndAbandonment() void
-    - resetStaffActions() void
-    - checkVictory() boolean
+    +GameController(restaurant: Restaurant, ui: ConsoleUI)
+    +GameController(restaurant: Restaurant, ui: ConsoleUI, arrivalFactory: IntFunction~Customer~)
+    +run() void
+    -processTurn() void
+    -processArrivals() void
     -processHappyHourChoice() void
     -restoreWaitingCustomers() void
     -processHostChoice() void
+    -processWaiterChoice() void
+    -processChefChoice() void
+    -processEatingAndPayments() void
+    -processWaitingAndAbandonment() void
+    -resetStaffActions() void
+    -checkVictory() boolean
 }
-note for GameController "CHANGE; owner D. Keeps both existing constructors and arrivalFactory name. Stage selection uses restaurant.isStage3Enabled(). / Stage 3: arrivals -> activation choice -> recovery once -> updated display -> Host -> Waiter -> Chef -> existing end steps. / No customer type checks. Do not repeat recovery when status/help or invalid input repeats a prompt."
 class Restaurant {
-    <<class>>
     -List~Table~ tables
     -Queue~Customer~ waitingQueue
     -List~Customer~ customers
@@ -67,62 +60,56 @@ class Restaurant {
     -Waiter waiter
     -Chef chef
     -Cashier cashier
-    -int turn
-    -int servedCount
-    -int unhappyDepartures
     -boolean stage3Enabled
     -Host host
     -HappyHourPolicy happyHour
-    + nextTurn() void
-    + addArrival(c: Customer) void
-    + findCustomer(id: int) Customer
-    + findQueuedCustomer(id: int) Customer
-    + findTable(number: int) Table
-    + getOrder(customerId: int) Order
-    + addOrder(o: Order) void
-    + removeOrder(o: Order) void
-    + removeFromQueue(c: Customer) void
-    + handleDeparture(c: Customer) void
+    -int turn
+    -int servedCount
+    -int unhappyDepartures
     +Restaurant()
     +Restaurant(stage3Enabled: boolean)
     +isStage3Enabled() boolean
     +getHost() Host
     +getHappyHour() HappyHourPolicy
+    +findQueuedCustomer(id: int) Customer
+    +findCustomer(id: int) Customer
+    +findTable(number: int) Table
+    +getOrder(customerId: int) Order
+    +nextTurn() void
+    +addArrival(customer: Customer) void
+    +removeFromQueue(customer: Customer) void
+    +addOrder(order: Order) void
+    +removeOrder(order: Order) void
+    +handleDeparture(customer: Customer) void
 }
-note for Restaurant "CHANGE; owner D. Restaurant() keeps Stage 1/2 setup. Restaurant(true) owns Menu(true), Host and HappyHourPolicy. / Host/policy are absent outside Stage 3; getters throw there, guarded by isStage3Enabled(). / Ownership uses explicit fields, not an extra Staff collection. Collections have 0..* structural multiplicity."
+note for Restaurant "Composition: each game constructs its own tables, menu and employees. The controller routes actions through those objects."
 class Staff {
     <<abstract>>
     -boolean actedThisTurn
-    + hasActed() boolean
-    + resetTurn() void
-    + skipTurn() void
-    # requireAvailable() void
-    # markActed() void
+    +hasActed() boolean
+    +resetTurn() void
+    +skipTurn() void
+    #requireAvailable() void
+    #markActed() void
 }
-note for Staff "EXISTING; owner C. One action per role per turn; failed action does not consume availability. Reset all four roles in Stage 3."
 class Waiter {
-    <<class>>
-    + seat(c: Customer, t: Table) void
-    + takeOrder(c: Customer, m: Menu) Order
-    + serve(o: Order, turn: int) void
+    +seat(customer: Customer, table: Table) void
+    +takeOrder(customer: Customer, menu: Menu) Order
     +takeOrder(customer: Customer, menu: Menu, policy: HappyHourPolicy, turn: int) Order
+    -chooseOrderItem(customer: Customer, menu: Menu) MenuItem
+    +serve(order: Order, turn: int) void
 }
-note for Waiter "CHANGE; owner C. Existing seat/order/serve retained. Stage 3 overload validates before quoting or mutating. / Choose meal once -> policy.quote once -> new Order with final price -> placeOrder -> markActed. / The old overload preserves Stage 1/2 and does not require HappyHourPolicy."
 class Chef {
-    <<class>>
-    + advance(o: Order, turn: int) void
+    +advance(order: Order, turn: int) void
 }
-note for Chef "EXISTING; owner C. Unchanged: one preparation unit per turn, including ComboMeal; no special combo branch."
 class Cashier {
-    <<class>>
     -int revenueCents
     -List~Integer~ paidSatisfactions
-    + collectPayment(c: Customer, turn: int) int
-    + getRevenueCents() int
-    + getPaidCount() int
-    + getAverageSatisfaction() double
+    +getRevenueCents() int
+    +getPaidCount() int
+    +getAverageSatisfaction() double
+    +collectPayment(customer: Customer, turn: int) int
 }
-note for Cashier "EXISTING; owner C. Unchanged: controller selects oldest eligible payer; Cashier validates and collects one locked bill per turn. / Paid satisfaction recorded once; no re-discounting at payment time."
 class Customer {
     <<abstract>>
     -int id
@@ -132,93 +119,81 @@ class Customer {
     -Order order
     -int servedTurn
     -int readyToPayTurn
-    + waitingLoss() int*
-    + loseWaitingSatisfaction() void
-    + chooseMeal(menu: Menu) MenuItem
-    + priceFor(item: MenuItem) int
-    + getTypeLabel() String
-    + seat(table: Table) void
-    + placeOrder(order: Order) void
-    + markServed(turn: int) void
-    + finishEating(turn: int) void
-    + canPay(turn: int) boolean
-    + markPaid() void
-    + leave() void
+    +waitingLoss() int*
+    +priceFor(item: MenuItem) int
+    +getTypeLabel() String
+    +loseWaitingSatisfaction() void
     +restoreWaitingSatisfaction(amount: int) void
+    +chooseMeal(menu: Menu) MenuItem
+    +seat(table: Table) void
+    +placeOrder(order: Order) void
+    +markServed(turn: int) void
+    +finishEating(turn: int) void
+    +canPay(turn: int) boolean
+    +markPaid() void
+    +leave() void
 }
-note for Customer "CHANGE; owner A. A changes chooseMeal: ID 5 selects the combo only when menu.hasCombo(). Critic overrides remain Pasta. / Recovery: only QUEUED/SEATED; +amount capped at 100; negative amount rejected, zero is a no-op. Use long intermediate. / Private state + guarded domain methods demonstrate encapsulation. Waiting loss / meal / price use polymorphism."
+note for Customer "Encapsulation: changes to seating, service and satisfaction pass through state-checked methods. Waiting recovery applies to queued or seated customers and stops at 100."
 class RegularCustomer {
-    <<class>>
-    + waitingLoss() int
+    +waitingLoss() int
 }
-note for RegularCustomer "EXISTING; owner A. Existing: waiting loss 8; inherits deterministic meal selection."
 class VIPCustomer {
-    <<class>>
-    + waitingLoss() int
-    + priceFor(item: MenuItem) int
-    + getTypeLabel() String
+    +getTypeLabel() String
+    +waitingLoss() int
+    +priceFor(item: MenuItem) int
 }
-note for VIPCustomer "EXISTING; owner A. Existing: waiting loss 5; priceFor gives 90% in cents with half-up rounding. No menu mutation."
 class CriticCustomer {
-    <<class>>
-    + waitingLoss() int
-    + chooseMeal(menu: Menu) MenuItem
-    + getTypeLabel() String
+    +getTypeLabel() String
+    +waitingLoss() int
+    +chooseMeal(menu: Menu) MenuItem
 }
-note for CriticCustomer "EXISTING; owner A. Existing: waiting loss 12; always Pasta, including Stage 3. ID 4 remains visibly distinct."
+note for CriticCustomer "Polymorphism: the Waiter asks every customer to chooseMeal. The Critic implementation always returns Pasta."
 class Stage2Arrivals {
-    <<class>>
-    + create(id: int) Customer$
+    +create(id: int) Customer$
 }
-note for Stage2Arrivals "EXISTING; owner D. Reuse unchanged for Stage 3: ID 2 VIP, ID 4 Critic; all others Regular. Exactly 6 arrivals."
 class Table {
-    <<class>>
     -int number
     -Customer occupant
-    + isFree() boolean
-    + seat(c: Customer) void
-    + release() void
+    +isFree() boolean
+    +seat(customer: Customer) void
+    +release() void
 }
-note for Table "EXISTING; owner B. Unchanged: one occupant, released only after payment or abandonment."
 class Order {
-    <<class>>
     -Customer customer
     -MenuItem item
     -int lockedPriceCents
     -int unitsDone
     -OrderStatus status
     -int readyTurn
-    + Order(c: Customer, item: MenuItem)
-    + getLockedPriceCents() int
-    + advance(turn: int) void
-    + isServable(turn: int) boolean
-    + markServed() void
-    + markPaid() void
-    + cancel() void
+    +Order(customer: Customer, item: MenuItem)
     +Order(customer: Customer, item: MenuItem, lockedPriceCents: int)
+    +getLockedPriceCents() int
+    +advance(turn: int) void
+    +isServable(turn: int) boolean
+    +markServed() void
+    +markPaid() void
+    +cancel() void
 }
-note for Order "CHANGE; owner B. lockedPriceCents remains final. Old constructor calls customer.priceFor(item) once. / New constructor validates customer/item and nonnegative final price, stores it, and does NOT quote again. / READY can be served only on a later turn. Cashier reads the saved bill; never recomputes discounts."
+note for Order "The order retains its final price in cents. The cashier collects that amount even after Happy Hour expires."
 class Menu {
-    <<class>>
     -List~MenuItem~ items
-    + getItems() List~MenuItem~
-    + find(name: String) MenuItem
+    -ComboMeal combo
     +Menu()
     +Menu(includeCombo: boolean)
     +hasCombo() boolean
     +getCombo() ComboMeal
+    +getItems() List~MenuItem~
+    +find(name: String) MenuItem
 }
-note for Menu "CHANGE; owner A. Menu() retains exactly 3 base items; Menu(true) adds one Salad + Pasta combo named Combo. / getCombo() throws if absent; hasCombo() is the guard. Return an immutable item list."
+note for Menu "The Stage 3 menu stores one ComboMeal and includes that same instance in its list of four dishes."
 class MenuItem {
-    <<class>>
     -String name
     -int priceCents
     -int prepUnits
-    + getName() String
-    + getPriceCents() int
-    + getPrepUnits() int
+    +getName() String
+    +getPriceCents() int
+    +getPrepUnits() int
 }
-note for MenuItem "EXISTING; owner A. Existing immutable data; inherited name, priceCents and prepUnits are final. No new setters."
 class CustomerState {
     <<enumeration>>
     QUEUED
@@ -228,7 +203,6 @@ class CustomerState {
     PAID
     LEFT
 }
-note for CustomerState "EXISTING; owner A. "
 class OrderStatus {
     <<enumeration>>
     PLACED
@@ -238,36 +212,34 @@ class OrderStatus {
     PAID
     CANCELLED
 }
-note for OrderStatus "EXISTING; owner B. "
 class ComboMeal {
-    <<class>>
     -MenuItem first
     -MenuItem second
     +ComboMeal(name: String, first: MenuItem, second: MenuItem)
+    +getFirst() MenuItem
+    +getSecond() MenuItem
+    -comboPrice(first: MenuItem, second: MenuItem) int$
 }
-note for ComboMeal "NEW; owner A. NEW: immutable subclass of MenuItem; two distinct non-null existing basic items, referenced, not copied. / Salad + Pasta: 2430 cents, 3 units. Sum with long; half-up nearest cent; reject int overflow. / Menu owns item lifetime; combo shares components (hollow diamond), not exclusive composition."
+note for ComboMeal "The combo references two distinct basic items. Its base price is 90% of their total, rounded to the nearest cent. Preparation units add."
 class HappyHourPolicy {
-    <<class>>
-    -int activationTurn = -1
+    -int DURATION$
+    -int activationTurn
     +activate(turn: int) void
     +hasActivated() boolean
     +isActive(turn: int) boolean
     +remainingTurns(turn: int) int
     +quote(customer: Customer, item: MenuItem, turn: int) int
 }
-note for HappyHourPolicy "NEW; owner B. NEW: activate once in turns 1..18. Active at t and t+1; remaining duration 2, 1, then 0. / Read-only queries accept turn 0 for pre-game UI; quote requires turn 1..18. Negative turns rejected. / quote calls customer.priceFor(item) once, then applies 80% only if active. Reject null/negative quote; use long half-up. / Activation at turn 18 is allowed: UI explains that the game still ends at 18. No extra turn is added."
 class Host {
-    <<class>>
     +seat(customer: Customer, table: Table) void
 }
-note for Host "NEW; owner C. NEW: extends Staff. Seat at most one queued customer per turn, independently of Waiter. / Validate availability, customer/table, queued/unseated and free table BEFORE mutation; markActed only on success. / Controller removes the seated customer from the queue only after successful seating."
 Customer <|-- RegularCustomer
 Customer <|-- VIPCustomer
 Customer <|-- CriticCustomer
 MenuItem <|-- ComboMeal
 ComboMeal "0..*" o-- "2" MenuItem : components
 Menu "1" *-- "3..4" MenuItem : items
-Menu ..> ComboMeal : getCombo
+Menu "1" --> "0..1" ComboMeal : cached combo
 Table "0..1" -- "0..1" Customer : current seating
 Customer "1" -- "0..1" Order : places
 Order "0..*" --> "1" MenuItem : item
