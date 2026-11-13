@@ -1,4 +1,4 @@
-# Implementation status — 7 November 2026
+# Implementation status, 13 November 2026
 
 ## Stage 1
 The immutable `stage-1` tag remains `8d7fa09ddae3053f97f9a7ebe9738f3335740133`.
@@ -19,5 +19,18 @@ Inputs are in `src/test/resources`; recorded CLI output is in `docs/evidence/sta
 Victory: 4 paid, $58.50, average satisfaction 75.5. Defeat: 0 paid, $0.00, N/A.
 Names in the class diagram match the implementation: `arrivalFactory` and `stageLabel`.
 
+## Stage 3
+Tag `stage-3`, commit `51721224e62392ad4e6ee115d5bbe8b932b9f9e1`. Run `sh scripts/run.sh --stage3`.
+
+| Part | Implemented scope | Verification |
+| --- | --- | --- |
+| A | ComboMeal (Salad + Pasta), Menu(true), ID 5 combo choice, waiting recovery | 7 customer/menu scenarios |
+| B | HappyHourPolicy (once, 2 turns, 80% after VIP), locked final price on Order | 7 pricing scenarios |
+| C | Host seating, policy-aware Waiter.takeOrder, task rules | 13 host/staff scenarios |
+| D | Restaurant(true), Manager and Host prompts, recovery once per turn, --stage3, complete games | 12 controller scenarios |
+
+`sh scripts/test.sh` runs all 13 suites: 111 checks pass. Recorded CLI output is in `docs/evidence/stage3`.
+Victory: 5 paid, $80.10, average satisfaction 85.6. Defeat: 0 paid, $0.00, N/A. See [Stage 3 acceptance](STAGE3_ACCEPTANCE.md).
+
 ## Remaining coursework
-Stage 3, the final sequence diagram, report/reflections, presentation, team walkthrough and required AI histories/declarations remain separate deliverables. Automated code acceptance does not certify these submissions.
+The report/reflections, presentation, team walkthrough and required AI histories/declarations remain separate deliverables. Automated code acceptance does not certify these submissions.

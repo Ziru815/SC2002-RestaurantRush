@@ -6,7 +6,7 @@ Java 17+ command-line restaurant game. No third-party libraries or network acces
 
 - **Stage 1 runnable baseline:** tag [`stage-1`](https://github.com/Ziru815/SC2002-RestaurantRush/releases/tag/stage-1), commit `8d7fa09ddae3053f97f9a7ebe9738f3335740133`, after PR #7. Four suites passed 40/40; a victory and defeat were replayed for all 18 turns. See [saved evidence](docs/evidence/stage1/README.md).
 - **Stage 2 implemented:** run `sh scripts/run.sh --stage2`. VIP/Critic behavior, locked pricing and mixed arrivals are integrated; all 72 checks pass. Default launch keeps Stage 1. [Acceptance and replay evidence](docs/STAGE2_ACCEPTANCE.md).
-- **Stage 3:** not started. Do not mix Host, ComboMeal or Happy Hour into Stage 2.
+- **Stage 3 implemented:** tag [`stage-3`](https://github.com/Ziru815/SC2002-RestaurantRush/releases/tag/stage-3), commit `51721224e62392ad4e6ee115d5bbe8b932b9f9e1`, after PR #18. Run `sh scripts/run.sh --stage3`. Adds the Combo meal, Happy Hour and the Host. All 111 checks pass. [Acceptance and replay evidence](docs/STAGE3_ACCEPTANCE.md).
 
 ## Build and play
 
@@ -16,10 +16,12 @@ sh scripts/run.sh
 sh scripts/run.sh --check
 sh scripts/run.sh --stage2
 sh scripts/run.sh --stage2 --check
+sh scripts/run.sh --stage3
+sh scripts/run.sh --stage3 --check
 sh scripts/test.sh
 ```
 
-`test.sh` compiles all main/test sources with Java 17, `-Xlint:all -Werror`, then runs all nine suites: 45 existing checks plus 27 Stage 2 scenarios (72 total), including complete mixed-customer victory and defeat games.
+`test.sh` compiles all main/test sources with Java 17, `-Xlint:all -Werror`, then runs all 13 suites: 40 Stage 1 checks, 32 checks added in Stage 2 and 39 added in Stage 3 (111 total; the running totals at the three tags are 40, 72 and 111), including complete victory and defeat games for Stage 2 and Stage 3.
 
 ```sh
 sh scripts/test-stage2.sh
@@ -33,10 +35,12 @@ For IDE use, set JDK 17+, main source root `src/main/java`, test root `src/test/
 
 - [Stage 2 four-person guide and exact contracts](docs/STAGE2_TEAM_GUIDE.md)
 - [Stage 2 acceptance checklist](docs/STAGE2_ACCEPTANCE.md)
+- [Stage 3 four-person guide](docs/STAGE3_TEAM_GUIDE.md) and [interfaces](docs/STAGE3_INTERFACES.md)
+- [Stage 3 acceptance checklist](docs/STAGE3_ACCEPTANCE.md)
 - [Current implementation status](docs/IMPLEMENTATION_STATUS.md)
 - [Submission checklist and responsibilities](docs/SUBMISSION_CHECKLIST.md)
 
-Keep the single normal `src/` tree. All Stage 2 implementation placeholders are resolved. Use [the Stage 2 class diagram](docs/class-diagram-stage2.mmd) for the implemented interfaces.
+Keep the single normal `src/` tree. Class diagrams for each stage: [Stage 1](docs/class-diagram-stage1.mmd), [Stage 2](docs/class-diagram-stage2.mmd), [Stage 3](docs/class-diagram-stage3.mmd).
 
 ## Rules retained from Stage 1
 
@@ -50,7 +54,7 @@ Repository: https://github.com/Ziru815/SC2002-RestaurantRush
 | --- | --- |
 | Stage 1 | Fixed `stage-1` tag; replay inputs and results in docs/evidence/stage1 |
 | 1 -> 2 | Tag `stage-2`. Files added and changed, with reasons, in [Stage 1 to Stage 2](#stage-1-to-stage-2) below. |
-| 2 -> 3 | Pending; retain Stage 2 before adding Stage 3 features. |
+| 2 -> 3 | Tag `stage-3`. Files added and changed, with reasons, in [Stage 2 to Stage 3](#stage-2-to-stage-3) below. |
 
 Sequence diagram (Stage 2): [docs/Stage2SequenceDiagram.png](docs/Stage2SequenceDiagram.png). One manager playthrough with `--stage2`, from arrival and VIP order pricing through serving, payment and the final result check.
 
@@ -86,6 +90,40 @@ Tests added: `CustomerExtensionTests`, `Stage2CustomerTests`, `Stage2OrderTests`
 Deleted: no production or test files. Internal planning notes under `docs/superpowers/` were removed because they were working notes, not part of the submission.
 
 Stage 1 still works: `sh scripts/run.sh` with no option plays the Stage 1 game, and its four original test suites still pass in `sh scripts/test.sh`.
+
+## Stage 2 to Stage 3
+
+Compare: [`stage-2...stage-3`](https://github.com/Ziru815/SC2002-RestaurantRush/compare/93fc50663056681469000208941ace992ccbb5a0...51721224e62392ad4e6ee115d5bbe8b932b9f9e1) (tag commits `93fc506` to `5172122`).
+
+Stage 3 adds a Combo meal, a once-per-game Happy Hour and a Host who seats customers. The Stage 2 customers (VIP ID 2, Critic ID 4) and arrival turns are reused unchanged. Stage 3 is switched on by one flag, `Restaurant(true)`, so the same controller runs all three stages.
+
+New production files:
+
+| File | Purpose |
+| --- | --- |
+| `ComboMeal.java` | A `MenuItem` made from Salad and Pasta: 2430 cents (10% off 2700) and 3 preparation units. Built from its parts, so the Waiter, Chef and Cashier treat it like any other dish. |
+| `HappyHourPolicy.java` | Can be started once per game and lasts that turn and the next. While active, new orders cost 80% of the customer's own price, so a VIP pays 90% first and then 80% (Burger 1500 to 1350 to 1080 cents). |
+| `Host.java` | A new `Staff` member with one task per turn: seat a queued customer. The Waiter can still seat, so two customers can be seated in one turn. |
+
+Existing files changed:
+
+| File | Change | Reason |
+| --- | --- | --- |
+| `Menu.java` | New `Menu(boolean includeCombo)`, `hasCombo()` and `getCombo()`. `Menu()` still gives the three dishes. | Only the Stage 3 menu offers the combo, so Stages 1 and 2 are unchanged. |
+| `Customer.java` | Added `restoreWaitingSatisfaction(amount)`, capped at 100 and only for QUEUED or SEATED customers. Regular customer ID 5 picks the combo when the menu has one. | Happy Hour helps customers who are still waiting, through the customer's own method instead of the controller changing satisfaction directly. |
+| `Order.java` | New constructor that takes an already final price, `Order(customer, item, lockedPriceCents)`. | The Happy Hour price is worked out once when the order is taken and locked, so later turns cannot change the bill. |
+| `Waiter.java` | New `takeOrder(customer, menu, policy, turn)`. Both versions share one private `chooseOrderItem` check. | Stage 3 orders are priced through the policy; the Stage 1 and 2 path stays the same. |
+| `Restaurant.java` | New `Restaurant(boolean stage3Enabled)` that creates `Menu(true)`, one Host and one Happy Hour policy. `getHost()` and `getHappyHour()` refuse outside Stage 3. | Stage 3 parts exist only in Stage 3, and asking for them in an earlier stage is an error instead of a silent null. |
+| `GameController.java` | In Stage 3 each turn asks the Manager (`happyhour` or `wait`) until Happy Hour is used, gives +15 to waiting customers on each active turn, then asks the Host before the Waiter. Seating by Host and Waiter shares one helper. | Matches the Stage 3 turn order in the team guide. The controller checks `isStage3Enabled()`, never the screen label. |
+| `ConsoleUI.java` | In Stage 3 shows the Host line, the Happy Hour status and the Manager and Host commands in help. | Display only. |
+| `Main.java` | Added `--stage3`; `--stage2` and `--stage3` together are rejected. | Each stage can still be launched on its own. |
+| `scripts/test.sh` | Runs the four new test suites. | One command runs every check for all three stages. |
+
+Tests added: `Stage3CustomerMenuTests` (7), `Stage3PricingTests` (7), `Stage3HostStaffTests` (13), `Stage3ControllerTests` (12), and the replay inputs `stage3-victory.input.txt` and `stage3-defeat.input.txt`.
+
+Deleted: no files.
+
+Stages 1 and 2 still work: `sh scripts/run.sh` and `sh scripts/run.sh --stage2` play the earlier games, their test suites still pass, and the Stage 2 victory and defeat replays give the same results as at `stage-2`.
 
 The old README at the immutable Stage 1 tag still says skeleton; these current notes correct that stale description without moving the tag. A final report and accurate diagrams remain separate deliverables.
 

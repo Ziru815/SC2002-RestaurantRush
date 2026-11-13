@@ -4,9 +4,9 @@ Source: the latest NTULearn requirement text supplied by Ziru on 3 November 2026
 
 Deadline wording: **Week 13 Sunday, 11:59 PM Singapore time**. Planning assumes the end of AY2026-27 Semester 1 teaching week 13, 15 November 2026; verify the explicit NTULearn assignment timestamp before relying on this conversion. Internal submission target: 14 November.
 
-- [ ] Runnable code for all 3 stages; stage-1 / stage-2 / stage-3 GitHub tags.
+- [x] Runnable code for all 3 stages; stage-1 / stage-2 / stage-3 GitHub tags.
 - [ ] 3 class diagrams, one matching each stage's actual code.
-- [ ] 1 Stage 2 or Stage 3 sequence diagram including a complete customer workflow and relevant behavior.
+- [x] 1 Stage 2 or Stage 3 sequence diagram including a complete customer workflow and relevant behavior.
 - [ ] Group report with each member's individual reflection.
 - [ ] 15-minute presentation video; all members explain parts they understand; README timestamps.
 - [ ] GitHub repository/tag/compare links.

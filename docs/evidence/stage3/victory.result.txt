@@ -1,0 +1,431 @@
+Restaurant Rush - Stage 3
+You are the manager. Each turn you choose one task for the Waiter and one for the Chef.
+Tables: 2; turns: 18
+Arrivals on turns: 1, 4, 7, 10, 13, 16
+To win, after the last turn: paid customers >= 4, revenue >= $45.00, paid-customer average satisfaction >= 60
+Before the game: status | menu | tasks | help | start | quit
+Waiter: seat <customerId> <tableNo> | order <customerId> | serve <customerId> | wait
+Chef:   cook <customerId> | wait
+Manager: happyhour | wait (only until Happy Hour has been used)
+Host:   seat <customerId> <tableNo> | wait
+In any prompt: status shows the restaurant again; help shows this list.
+
+===== Turn 0 / 18 =====
+Revenue: $0.00 | Paid: 0 | Paid average: N/A
+Waiting queue: empty
+Table 1: free
+Table 2: free
+Host: available (seat one queued customer / wait)
+Waiter: available (seat / order / serve / wait)
+Chef: available (cook one order / wait)
+Cashier: available (automatic payment)
+Served: 0 | Unhappy departures: 0
+Happy Hour: not used yet (once per game, lasts 2 turns, 20% off new orders, waiting customers recover 15 satisfaction each turn)
+> Customer 1 arrives and joins the queue.
+
+===== Turn 1 / 18 =====
+Revenue: $0.00 | Paid: 0 | Paid average: N/A
+Waiting queue: C1
+Table 1: free
+Table 2: free
+C1 (Regular) | satisfaction: 100 | QUEUED | order: none
+Host: available (seat one queued customer / wait)
+Waiter: available (seat / order / serve / wait)
+Chef: available (cook one order / wait)
+Cashier: available (automatic payment)
+Served: 0 | Unhappy departures: 0
+Happy Hour: not used yet (once per game, lasts 2 turns, 20% off new orders, waiting customers recover 15 satisfaction each turn)
+Manager> Manager keeps Happy Hour for later.
+Host> Host seats customer 1 at table 1.
+Waiter> Waiter takes customer 1's order: Salad ($9.00).
+Chef> Chef cooks customer 1's Salad: READY.
+End of turn 1: served 0 | unhappy departures 0 | revenue $0.00 | paid average N/A | turns used 1
+
+===== Turn 2 / 18 =====
+Revenue: $0.00 | Paid: 0 | Paid average: N/A
+Waiting queue: empty
+Table 1: C1
+Table 2: free
+C1 (Regular) | satisfaction: 92 | SEATED | order: Salad READY
+Host: available (seat one queued customer / wait)
+Waiter: available (seat / order / serve / wait)
+Chef: available (cook one order / wait)
+Cashier: available (automatic payment)
+Served: 0 | Unhappy departures: 0
+Happy Hour: not used yet (once per game, lasts 2 turns, 20% off new orders, waiting customers recover 15 satisfaction each turn)
+Manager> Manager keeps Happy Hour for later.
+Host> Host waits.
+Waiter> Waiter serves customer 1.
+Chef> Chef waits.
+End of turn 2: served 1 | unhappy departures 0 | revenue $0.00 | paid average N/A | turns used 2
+
+===== Turn 3 / 18 =====
+Revenue: $0.00 | Paid: 0 | Paid average: N/A
+Waiting queue: empty
+Table 1: C1
+Table 2: free
+C1 (Regular) | satisfaction: 92 | SERVED | order: Salad SERVED
+Host: available (seat one queued customer / wait)
+Waiter: available (seat / order / serve / wait)
+Chef: available (cook one order / wait)
+Cashier: available (automatic payment)
+Served: 1 | Unhappy departures: 0
+Happy Hour: not used yet (once per game, lasts 2 turns, 20% off new orders, waiting customers recover 15 satisfaction each turn)
+Manager> Manager keeps Happy Hour for later.
+Host> Host waits.
+Waiter> Waiter waits.
+Chef> Chef waits.
+Customer 1 finishes eating and is ready to pay.
+End of turn 3: served 1 | unhappy departures 0 | revenue $0.00 | paid average N/A | turns used 3
+Customer 2 arrives and joins the queue.
+
+===== Turn 4 / 18 =====
+Revenue: $0.00 | Paid: 0 | Paid average: N/A
+Waiting queue: C2
+Table 1: C1
+Table 2: free
+C1 (Regular) | satisfaction: 92 | READY_TO_PAY | order: Salad SERVED
+C2 (VIP) | satisfaction: 100 | QUEUED | order: none
+Host: available (seat one queued customer / wait)
+Waiter: available (seat / order / serve / wait)
+Chef: available (cook one order / wait)
+Cashier: available (automatic payment)
+Served: 1 | Unhappy departures: 0
+Happy Hour: not used yet (once per game, lasts 2 turns, 20% off new orders, waiting customers recover 15 satisfaction each turn)
+Manager> Manager starts Happy Hour. It lasts this turn and the next.
+Happy Hour: waiting customers recover 15 satisfaction.
+
+===== Turn 4 / 18 =====
+Revenue: $0.00 | Paid: 0 | Paid average: N/A
+Waiting queue: C2
+Table 1: C1
+Table 2: free
+C1 (Regular) | satisfaction: 92 | READY_TO_PAY | order: Salad SERVED
+C2 (VIP) | satisfaction: 100 | QUEUED | order: none
+Host: available (seat one queued customer / wait)
+Waiter: available (seat / order / serve / wait)
+Chef: available (cook one order / wait)
+Cashier: available (automatic payment)
+Served: 1 | Unhappy departures: 0
+Happy Hour: ACTIVE, 2 turns left including this one
+Host> Host seats customer 2 at table 2.
+Waiter> Waiter takes customer 2's order: Burger ($10.80).
+Chef> Chef cooks customer 2's Burger: READY.
+Cashier collects $9.00 from customer 1 (satisfaction recorded: 92).
+End of turn 4: served 1 | unhappy departures 0 | revenue $9.00 | paid average 92.0 | turns used 4
+
+===== Turn 5 / 18 =====
+Revenue: $9.00 | Paid: 1 | Paid average: 92.0
+Waiting queue: empty
+Table 1: free
+Table 2: C2
+C1 (Regular) | satisfaction: 92 | PAID | order: Salad PAID
+C2 (VIP) | satisfaction: 95 | SEATED | order: Burger READY
+Host: available (seat one queued customer / wait)
+Waiter: available (seat / order / serve / wait)
+Chef: available (cook one order / wait)
+Cashier: available (automatic payment)
+Served: 1 | Unhappy departures: 0
+Happy Hour: ACTIVE, 1 turn left including this one
+Happy Hour: waiting customers recover 15 satisfaction.
+
+===== Turn 5 / 18 =====
+Revenue: $9.00 | Paid: 1 | Paid average: 92.0
+Waiting queue: empty
+Table 1: free
+Table 2: C2
+C1 (Regular) | satisfaction: 92 | PAID | order: Salad PAID
+C2 (VIP) | satisfaction: 100 | SEATED | order: Burger READY
+Host: available (seat one queued customer / wait)
+Waiter: available (seat / order / serve / wait)
+Chef: available (cook one order / wait)
+Cashier: available (automatic payment)
+Served: 1 | Unhappy departures: 0
+Happy Hour: ACTIVE, 1 turn left including this one
+Host> Host waits.
+Waiter> Waiter serves customer 2.
+Chef> Chef waits.
+End of turn 5: served 2 | unhappy departures 0 | revenue $9.00 | paid average 92.0 | turns used 5
+
+===== Turn 6 / 18 =====
+Revenue: $9.00 | Paid: 1 | Paid average: 92.0
+Waiting queue: empty
+Table 1: free
+Table 2: C2
+C1 (Regular) | satisfaction: 92 | PAID | order: Salad PAID
+C2 (VIP) | satisfaction: 100 | SERVED | order: Burger SERVED
+Host: available (seat one queued customer / wait)
+Waiter: available (seat / order / serve / wait)
+Chef: available (cook one order / wait)
+Cashier: available (automatic payment)
+Served: 2 | Unhappy departures: 0
+Happy Hour: used and finished
+Host> Host waits.
+Waiter> Waiter waits.
+Chef> Chef waits.
+Customer 2 finishes eating and is ready to pay.
+End of turn 6: served 2 | unhappy departures 0 | revenue $9.00 | paid average 92.0 | turns used 6
+Customer 3 arrives and joins the queue.
+
+===== Turn 7 / 18 =====
+Revenue: $9.00 | Paid: 1 | Paid average: 92.0
+Waiting queue: C3
+Table 1: free
+Table 2: C2
+C1 (Regular) | satisfaction: 92 | PAID | order: Salad PAID
+C2 (VIP) | satisfaction: 100 | READY_TO_PAY | order: Burger SERVED
+C3 (Regular) | satisfaction: 100 | QUEUED | order: none
+Host: available (seat one queued customer / wait)
+Waiter: available (seat / order / serve / wait)
+Chef: available (cook one order / wait)
+Cashier: available (automatic payment)
+Served: 2 | Unhappy departures: 0
+Happy Hour: used and finished
+Host> Host seats customer 3 at table 1.
+Waiter> Waiter takes customer 3's order: Pasta ($18.00).
+Chef> Chef cooks customer 3's Pasta: 1/2.
+Cashier collects $10.80 from customer 2 (satisfaction recorded: 100).
+End of turn 7: served 2 | unhappy departures 0 | revenue $19.80 | paid average 96.0 | turns used 7
+
+===== Turn 8 / 18 =====
+Revenue: $19.80 | Paid: 2 | Paid average: 96.0
+Waiting queue: empty
+Table 1: C3
+Table 2: free
+C1 (Regular) | satisfaction: 92 | PAID | order: Salad PAID
+C2 (VIP) | satisfaction: 100 | PAID | order: Burger PAID
+C3 (Regular) | satisfaction: 92 | SEATED | order: Pasta PREPARING
+Host: available (seat one queued customer / wait)
+Waiter: available (seat / order / serve / wait)
+Chef: available (cook one order / wait)
+Cashier: available (automatic payment)
+Served: 2 | Unhappy departures: 0
+Happy Hour: used and finished
+Host> Host waits.
+Waiter> Waiter waits.
+Chef> Chef cooks customer 3's Pasta: READY.
+End of turn 8: served 2 | unhappy departures 0 | revenue $19.80 | paid average 96.0 | turns used 8
+
+===== Turn 9 / 18 =====
+Revenue: $19.80 | Paid: 2 | Paid average: 96.0
+Waiting queue: empty
+Table 1: C3
+Table 2: free
+C1 (Regular) | satisfaction: 92 | PAID | order: Salad PAID
+C2 (VIP) | satisfaction: 100 | PAID | order: Burger PAID
+C3 (Regular) | satisfaction: 84 | SEATED | order: Pasta READY
+Host: available (seat one queued customer / wait)
+Waiter: available (seat / order / serve / wait)
+Chef: available (cook one order / wait)
+Cashier: available (automatic payment)
+Served: 2 | Unhappy departures: 0
+Happy Hour: used and finished
+Host> Host waits.
+Waiter> Waiter serves customer 3.
+Chef> Chef waits.
+End of turn 9: served 3 | unhappy departures 0 | revenue $19.80 | paid average 96.0 | turns used 9
+Customer 4 arrives and joins the queue.
+
+===== Turn 10 / 18 =====
+Revenue: $19.80 | Paid: 2 | Paid average: 96.0
+Waiting queue: C4
+Table 1: C3
+Table 2: free
+C1 (Regular) | satisfaction: 92 | PAID | order: Salad PAID
+C2 (VIP) | satisfaction: 100 | PAID | order: Burger PAID
+C3 (Regular) | satisfaction: 84 | SERVED | order: Pasta SERVED
+C4 (Critic) | satisfaction: 100 | QUEUED | order: none
+Host: available (seat one queued customer / wait)
+Waiter: available (seat / order / serve / wait)
+Chef: available (cook one order / wait)
+Cashier: available (automatic payment)
+Served: 3 | Unhappy departures: 0
+Happy Hour: used and finished
+Host> Host seats customer 4 at table 2.
+Waiter> Waiter takes customer 4's order: Pasta ($18.00).
+Chef> Chef cooks customer 4's Pasta: 1/2.
+Customer 3 finishes eating and is ready to pay.
+End of turn 10: served 3 | unhappy departures 0 | revenue $19.80 | paid average 96.0 | turns used 10
+
+===== Turn 11 / 18 =====
+Revenue: $19.80 | Paid: 2 | Paid average: 96.0
+Waiting queue: empty
+Table 1: C3
+Table 2: C4
+C1 (Regular) | satisfaction: 92 | PAID | order: Salad PAID
+C2 (VIP) | satisfaction: 100 | PAID | order: Burger PAID
+C3 (Regular) | satisfaction: 84 | READY_TO_PAY | order: Pasta SERVED
+C4 (Critic) | satisfaction: 88 | SEATED | order: Pasta PREPARING
+Host: available (seat one queued customer / wait)
+Waiter: available (seat / order / serve / wait)
+Chef: available (cook one order / wait)
+Cashier: available (automatic payment)
+Served: 3 | Unhappy departures: 0
+Happy Hour: used and finished
+Host> Host waits.
+Waiter> Waiter waits.
+Chef> Chef cooks customer 4's Pasta: READY.
+Cashier collects $18.00 from customer 3 (satisfaction recorded: 84).
+End of turn 11: served 3 | unhappy departures 0 | revenue $37.80 | paid average 92.0 | turns used 11
+
+===== Turn 12 / 18 =====
+Revenue: $37.80 | Paid: 3 | Paid average: 92.0
+Waiting queue: empty
+Table 1: free
+Table 2: C4
+C1 (Regular) | satisfaction: 92 | PAID | order: Salad PAID
+C2 (VIP) | satisfaction: 100 | PAID | order: Burger PAID
+C3 (Regular) | satisfaction: 84 | PAID | order: Pasta PAID
+C4 (Critic) | satisfaction: 76 | SEATED | order: Pasta READY
+Host: available (seat one queued customer / wait)
+Waiter: available (seat / order / serve / wait)
+Chef: available (cook one order / wait)
+Cashier: available (automatic payment)
+Served: 3 | Unhappy departures: 0
+Happy Hour: used and finished
+Host> Host waits.
+Waiter> Waiter serves customer 4.
+Chef> Chef waits.
+End of turn 12: served 4 | unhappy departures 0 | revenue $37.80 | paid average 92.0 | turns used 12
+Customer 5 arrives and joins the queue.
+
+===== Turn 13 / 18 =====
+Revenue: $37.80 | Paid: 3 | Paid average: 92.0
+Waiting queue: C5
+Table 1: free
+Table 2: C4
+C1 (Regular) | satisfaction: 92 | PAID | order: Salad PAID
+C2 (VIP) | satisfaction: 100 | PAID | order: Burger PAID
+C3 (Regular) | satisfaction: 84 | PAID | order: Pasta PAID
+C4 (Critic) | satisfaction: 76 | SERVED | order: Pasta SERVED
+C5 (Regular) | satisfaction: 100 | QUEUED | order: none
+Host: available (seat one queued customer / wait)
+Waiter: available (seat / order / serve / wait)
+Chef: available (cook one order / wait)
+Cashier: available (automatic payment)
+Served: 4 | Unhappy departures: 0
+Happy Hour: used and finished
+Host> Host seats customer 5 at table 1.
+Waiter> Waiter takes customer 5's order: Combo ($24.30).
+Chef> Chef cooks customer 5's Combo: 1/3.
+Customer 4 finishes eating and is ready to pay.
+End of turn 13: served 4 | unhappy departures 0 | revenue $37.80 | paid average 92.0 | turns used 13
+
+===== Turn 14 / 18 =====
+Revenue: $37.80 | Paid: 3 | Paid average: 92.0
+Waiting queue: empty
+Table 1: C5
+Table 2: C4
+C1 (Regular) | satisfaction: 92 | PAID | order: Salad PAID
+C2 (VIP) | satisfaction: 100 | PAID | order: Burger PAID
+C3 (Regular) | satisfaction: 84 | PAID | order: Pasta PAID
+C4 (Critic) | satisfaction: 76 | READY_TO_PAY | order: Pasta SERVED
+C5 (Regular) | satisfaction: 92 | SEATED | order: Combo PREPARING
+Host: available (seat one queued customer / wait)
+Waiter: available (seat / order / serve / wait)
+Chef: available (cook one order / wait)
+Cashier: available (automatic payment)
+Served: 4 | Unhappy departures: 0
+Happy Hour: used and finished
+Host> Host waits.
+Waiter> Waiter waits.
+Chef> Chef cooks customer 5's Combo: 2/3.
+Cashier collects $18.00 from customer 4 (satisfaction recorded: 76).
+End of turn 14: served 4 | unhappy departures 0 | revenue $55.80 | paid average 88.0 | turns used 14
+
+===== Turn 15 / 18 =====
+Revenue: $55.80 | Paid: 4 | Paid average: 88.0
+Waiting queue: empty
+Table 1: C5
+Table 2: free
+C1 (Regular) | satisfaction: 92 | PAID | order: Salad PAID
+C2 (VIP) | satisfaction: 100 | PAID | order: Burger PAID
+C3 (Regular) | satisfaction: 84 | PAID | order: Pasta PAID
+C4 (Critic) | satisfaction: 76 | PAID | order: Pasta PAID
+C5 (Regular) | satisfaction: 84 | SEATED | order: Combo PREPARING
+Host: available (seat one queued customer / wait)
+Waiter: available (seat / order / serve / wait)
+Chef: available (cook one order / wait)
+Cashier: available (automatic payment)
+Served: 4 | Unhappy departures: 0
+Happy Hour: used and finished
+Host> Host waits.
+Waiter> Waiter waits.
+Chef> Chef cooks customer 5's Combo: READY.
+End of turn 15: served 4 | unhappy departures 0 | revenue $55.80 | paid average 88.0 | turns used 15
+Customer 6 arrives and joins the queue.
+
+===== Turn 16 / 18 =====
+Revenue: $55.80 | Paid: 4 | Paid average: 88.0
+Waiting queue: C6
+Table 1: C5
+Table 2: free
+C1 (Regular) | satisfaction: 92 | PAID | order: Salad PAID
+C2 (VIP) | satisfaction: 100 | PAID | order: Burger PAID
+C3 (Regular) | satisfaction: 84 | PAID | order: Pasta PAID
+C4 (Critic) | satisfaction: 76 | PAID | order: Pasta PAID
+C5 (Regular) | satisfaction: 76 | SEATED | order: Combo READY
+C6 (Regular) | satisfaction: 100 | QUEUED | order: none
+Host: available (seat one queued customer / wait)
+Waiter: available (seat / order / serve / wait)
+Chef: available (cook one order / wait)
+Cashier: available (automatic payment)
+Served: 4 | Unhappy departures: 0
+Happy Hour: used and finished
+Host> Host seats customer 6 at table 2.
+Waiter> Waiter serves customer 5.
+Chef> Chef waits.
+End of turn 16: served 5 | unhappy departures 0 | revenue $55.80 | paid average 88.0 | turns used 16
+
+===== Turn 17 / 18 =====
+Revenue: $55.80 | Paid: 4 | Paid average: 88.0
+Waiting queue: empty
+Table 1: C5
+Table 2: C6
+C1 (Regular) | satisfaction: 92 | PAID | order: Salad PAID
+C2 (VIP) | satisfaction: 100 | PAID | order: Burger PAID
+C3 (Regular) | satisfaction: 84 | PAID | order: Pasta PAID
+C4 (Critic) | satisfaction: 76 | PAID | order: Pasta PAID
+C5 (Regular) | satisfaction: 76 | SERVED | order: Combo SERVED
+C6 (Regular) | satisfaction: 92 | SEATED | order: none
+Host: available (seat one queued customer / wait)
+Waiter: available (seat / order / serve / wait)
+Chef: available (cook one order / wait)
+Cashier: available (automatic payment)
+Served: 5 | Unhappy departures: 0
+Happy Hour: used and finished
+Host> Host waits.
+Waiter> Waiter takes customer 6's order: Pasta ($18.00).
+Chef> Chef cooks customer 6's Pasta: 1/2.
+Customer 5 finishes eating and is ready to pay.
+End of turn 17: served 5 | unhappy departures 0 | revenue $55.80 | paid average 88.0 | turns used 17
+
+===== Turn 18 / 18 =====
+Revenue: $55.80 | Paid: 4 | Paid average: 88.0
+Waiting queue: empty
+Table 1: C5
+Table 2: C6
+C1 (Regular) | satisfaction: 92 | PAID | order: Salad PAID
+C2 (VIP) | satisfaction: 100 | PAID | order: Burger PAID
+C3 (Regular) | satisfaction: 84 | PAID | order: Pasta PAID
+C4 (Critic) | satisfaction: 76 | PAID | order: Pasta PAID
+C5 (Regular) | satisfaction: 76 | READY_TO_PAY | order: Combo SERVED
+C6 (Regular) | satisfaction: 84 | SEATED | order: Pasta PREPARING
+Host: available (seat one queued customer / wait)
+Waiter: available (seat / order / serve / wait)
+Chef: available (cook one order / wait)
+Cashier: available (automatic payment)
+Served: 5 | Unhappy departures: 0
+Happy Hour: used and finished
+Host> Host waits.
+Waiter> Waiter waits.
+Chef> Chef cooks customer 6's Pasta: READY.
+Cashier collects $24.30 from customer 5 (satisfaction recorded: 76).
+End of turn 18: served 5 | unhappy departures 0 | revenue $80.10 | paid average 85.6 | turns used 18
+
+===== Game over =====
+Turns used: 18
+Served: 5 | Paid: 5 | Unhappy departures: 0
+Revenue: $80.10
+Average satisfaction of paid customers: 85.6
+VICTORY
