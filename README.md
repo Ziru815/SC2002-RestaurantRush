@@ -40,7 +40,7 @@ For IDE use, set JDK 17+, main source root `src/main/java`, test root `src/test/
 - [Current implementation status](docs/IMPLEMENTATION_STATUS.md)
 - [Submission checklist and responsibilities](docs/SUBMISSION_CHECKLIST.md)
 
-Keep the single normal `src/` tree. Class diagrams for each stage: [Stage 1](docs/class-diagram-stage1.mmd), [Stage 2](docs/class-diagram-stage2.mmd), [Stage 3](docs/class-diagram-stage3.mmd).
+Keep the single normal `src/` tree. Class diagrams for each stage: [Stage 1](docs/class-diagram-stage1.mmd), [Stage 2](docs/class-diagram-stage2.mmd), [Stage 3 PDF](docs/Stage3-Class-Diagram.pdf) ([Mermaid source](docs/class-diagram-stage3.mmd)).
 
 ## Rules retained from Stage 1
 
