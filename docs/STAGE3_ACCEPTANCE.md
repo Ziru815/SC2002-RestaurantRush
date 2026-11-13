@@ -14,7 +14,7 @@ Tested code: tag `stage-3`, commit `51721224e62392ad4e6ee115d5bbe8b932b9f9e1` (m
 - [x] Combo = Salad + Pasta, 2430 cents, 3 preparation units; only on the Stage 3 menu; Regular ID 5 orders it in Stage 3.
 - [x] Happy Hour can be started once, lasts the turn it starts and the next, and is not offered again after it is used.
 - [x] Price order: menu price, then VIP 90%, then Happy Hour 80%, rounding half up at each step (VIP Burger 1500, 1350, 1080 cents).
-- [x] The bill is locked when the order is taken; an order taken during Happy Hour keeps its discount after Happy Hour ends, and one taken before or after pays full price.
+- [x] The bill is locked when the order is taken; an order taken during Happy Hour keeps its discount after Happy Hour ends, and one taken before or after pays the customer's usual price, including any VIP discount (a VIP Burger is $13.50 normally and $10.80 in Happy Hour).
 - [x] While Happy Hour is active, QUEUED and SEATED customers recover 15 satisfaction once per turn, capped at 100. Typing status, help or a wrong command does not repeat it.
 - [x] The Host seats one queued customer per turn; the Waiter can also seat, so two customers can be seated in the same turn.
 - [x] Invalid Manager, Host, Waiter and Chef commands do not use that staff member's task.
@@ -35,7 +35,7 @@ java -cp out/main restaurantrush.Main --stage3 < src/test/resources/stage3-defea
 | Victory | 18 | 5 | $80.10 | 85.6 | 0 | VICTORY |
 | Defeat | 18 | 0 | $0.00 | N/A | 2 | DEFEAT |
 
-In the victory run the Manager waits on turns 1 to 3 and starts Happy Hour on turn 4. Customer 2 (VIP) orders a Burger during Happy Hour and pays $10.80. Customer 5 orders the Combo after Happy Hour and pays the full $24.30. The locked bills are $9.00, $10.80, $18.00, $18.00 and $24.30.
+In the victory run the Manager waits on turns 1 to 3 and starts Happy Hour on turn 4. Customer 2 (VIP) orders a Burger during Happy Hour and pays $10.80. Customer 5 (Regular) orders the Combo after Happy Hour and pays its usual price, $24.30. The locked bills are $9.00, $10.80, $18.00, $18.00 and $24.30.
 
 The full CLI output of both runs is saved in `evidence/stage3/`. `Stage3ControllerTests` checks these results against the Restaurant and Cashier state.
 

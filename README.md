@@ -21,7 +21,7 @@ sh scripts/run.sh --stage3 --check
 sh scripts/test.sh
 ```
 
-`test.sh` compiles all main/test sources with Java 17, `-Xlint:all -Werror`, then runs all 13 suites: 45 Stage 1 checks, 27 Stage 2 checks and 39 Stage 3 checks (111 total), including complete victory and defeat games for Stage 2 and Stage 3.
+`test.sh` compiles all main/test sources with Java 17, `-Xlint:all -Werror`, then runs all 13 suites: 40 Stage 1 checks, 32 checks added in Stage 2 and 39 added in Stage 3 (111 total; the running totals at the three tags are 40, 72 and 111), including complete victory and defeat games for Stage 2 and Stage 3.
 
 ```sh
 sh scripts/test-stage2.sh
