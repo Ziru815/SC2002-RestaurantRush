@@ -56,6 +56,20 @@ Repository: https://github.com/Ziru815/SC2002-RestaurantRush
 | 1 -> 2 | Tag `stage-2`. Files added and changed, with reasons, in [Stage 1 to Stage 2](#stage-1-to-stage-2) below. |
 | 2 -> 3 | Tag `stage-3`. Files added and changed, with reasons, in [Stage 2 to Stage 3](#stage-2-to-stage-3) below. |
 
+### Change map
+
+Java classes in `src/main/java`, counted with `git diff --name-only` between the tags.
+
+| Transition | Added | Modified | Unchanged | Deleted |
+| --- | --- | --- | --- | --- |
+| Stage 1 -> 2 (17 -> 20 classes) | 3 | 8 | 9 | 0 |
+| Stage 2 -> 3 (20 -> 23 classes) | 3 | 8 | 12 | 0 |
+
+- Added in 1 -> 2: `VIPCustomer`, `CriticCustomer`, `Stage2Arrivals`. Unchanged: `CustomerState`, `GameConfig`, `Menu`, `MenuItem`, `OrderStatus`, `RegularCustomer`, `Restaurant`, `Staff`, `Table`.
+- Added in 2 -> 3: `ComboMeal`, `HappyHourPolicy`, `Host`. Unchanged: `Cashier`, `Chef`, `CriticCustomer`, `CustomerState`, `GameConfig`, `MenuItem`, `OrderStatus`, `RegularCustomer`, `Staff`, `Stage2Arrivals`, `Table`, `VIPCustomer`.
+- Every class added in Stage 2 is unchanged in Stage 3: the new features came in as new classes. Two of the 1 -> 2 changes are small (`Cashier` gained comments only, `Chef` one validation check).
+- The modified files and the reason for each change are listed in the two sections below.
+
 Sequence diagram (Stage 2): [docs/Stage2SequenceDiagram.png](docs/Stage2SequenceDiagram.png). One manager playthrough with `--stage2`, from arrival and VIP order pricing through serving, payment and the final result check.
 
 ## Stage 1 to Stage 2
