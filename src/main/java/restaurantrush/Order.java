@@ -2,7 +2,7 @@ package restaurantrush;
 
 import java.util.Objects;
 
-/** Owner B. Lock the bill at creation; preserve READY turn to prevent early serving. */
+/** Lock the bill at creation; preserve READY turn to prevent early serving. */
 public final class Order {
     private final Customer customer;
     private final MenuItem item;

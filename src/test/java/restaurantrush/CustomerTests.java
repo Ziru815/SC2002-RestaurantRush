@@ -1,6 +1,6 @@
 package restaurantrush;
 
-/** Focused Stage 1 checks for owner A's customer and menu behavior. */
+/** Focused Stage 1 checks for the customer and menu behavior. */
 public final class CustomerTests {
     private static int passed;
 

@@ -1,6 +1,6 @@
 # Coursework submission checklist
 
-Source: the latest NTULearn requirement text supplied by Ziru on 3 November 2026. It supersedes the older brief where deliverable counts differ.
+Source: the NTULearn assignment requirements of 3 November 2026. It supersedes the older brief where deliverable counts differ.
 
 Deadline wording: **Week 13 Sunday, 11:59 PM Singapore time**. Planning assumes the end of AY2026-27 Semester 1 teaching week 13, 15 November 2026; verify the explicit NTULearn assignment timestamp before relying on this conversion. Internal submission target: 14 November.
 
@@ -19,14 +19,12 @@ A/Ziru: coordinate three class diagrams and customer-design explanation. Each te
 B: phase-change table and order/pricing/composition design discussion.
 C: reproduce full scenarios and prepare gameplay demonstrations.
 D/Tianren: sequence diagram, final integration, README/tag links and packaging.
-Everyone: own reflection, AI records, declarations, video explanation, and peer review.
+Everyone: own reflection, required submission records, video explanation, and peer review.
 
 ## Internal targets
 3-5 Nov: preserve Stage 1 and implement/integrate Stage 2.
 6-9 Nov: Stage 3 features and regression checks.
 10-11 Nov: complete code acceptance, diagrams and report draft.
-12-13 Nov: video, individual reflections, AI histories and declarations.
+12-13 Nov: video, individual reflections and required submission records.
 14 Nov: clean-package reproduction and submission.
 15 Nov: contingency only, subject to confirmed NTULearn date/time.
-
-Do not fabricate authorship, test outcomes, AI records or personal reflections. Shared scaffolding is recorded as AI-assisted preparation; each member contributes and explains their actual subsequent work.

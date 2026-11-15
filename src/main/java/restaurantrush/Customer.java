@@ -1,6 +1,6 @@
 package restaurantrush;
 
-/** Owner A. Implement transitions here, without CLI reads or prints. */
+/** Tracks satisfaction and the customer lifecycle from arrival to payment or departure. */
 public abstract class Customer {
     private final int id;
     private int satisfaction = 100;

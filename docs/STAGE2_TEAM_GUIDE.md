@@ -31,4 +31,4 @@ Stage 2 已实现并整合。默认启动保留 Stage 1；`sh scripts/run.sh --s
 - 胜败输入位于 `src/test/resources/stage2-*.input.txt`；输出记录位于 `docs/evidence/stage2/`。
 - 接线接口为 `GameController(Restaurant, ConsoleUI, IntFunction<Customer> arrivalFactory)` 与 `ConsoleUI(InputStream, PrintStream, String stageLabel)`；原有两参数构造器保留默认 Stage 1。
 - PR 使用 Create a merge commit；不 rebase、不强推，不能合并自己发起的 PR。
-- 保留完整 AI 使用历史、实际测试记录和个人反思；每人须能解释自己的设计和测试。
+- 每人须能解释自己的设计和测试。个人提交材料见[提交清单](SUBMISSION_CHECKLIST.md)。

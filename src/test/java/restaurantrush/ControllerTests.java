@@ -6,7 +6,7 @@ import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 
 /**
- * Owner D. Checks the whole game through the command line, so it needs the Customer,
+ * Checks the whole game through the command line, so it needs the Customer,
  * Table, Order and staff methods (owners A, B, C) to be implemented. Run it by hand
  * once they are in: java -cp out/main:out/test restaurantrush.ControllerTests
  *

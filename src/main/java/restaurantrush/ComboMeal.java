@@ -1,6 +1,6 @@
 package restaurantrush;
 
-/** Owner A. A single orderable dish made from two existing menu items. */
+/** A single orderable dish made from two existing menu items. */
 public final class ComboMeal extends MenuItem {
     private final MenuItem first;
     private final MenuItem second;

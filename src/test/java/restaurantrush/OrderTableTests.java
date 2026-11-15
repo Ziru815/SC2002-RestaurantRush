@@ -1,6 +1,6 @@
 package restaurantrush;
 
-/** Focused Stage 1 checks for Owner B's table and order lifecycle. */
+/** Focused Stage 1 checks for the table and order lifecycle. */
 public final class OrderTableTests {
     private static int passed;
 

@@ -13,7 +13,7 @@
 | C 员工 | Staff.java, Waiter.java, Chef.java, Cashier.java | 调用 A/B 方法执行动作；每人每轮一次；付款记账及释放桌子 | 不合法动作不耗任务；厨师一次只做一单位；同一账单不能付两次 |
 | D 主循环和整合 | Restaurant.java, GameController.java, ConsoleUI.java, Main.java, GameConfig.java | 六次到店、18 回合、输入重试、按顺序调用 A/B/C、胜负；界面启动和预览已提供 | 完整走通顾客流程；到 18 回合才结束；能重复胜利和失败 |
 
-D 的工作依赖其他三人的接口，不能等最后一天才整合。其他人先交一个小功能，D 当天就接入并运行。需要 Codex 帮忙时，把最新分支或 ZIP 和具体报错提供出来。
+D 的工作依赖其他三人的接口，不能等最后一天才整合。其他人先交一个小功能，D 当天就接入并运行。
 
 ## 已固定的接口
 

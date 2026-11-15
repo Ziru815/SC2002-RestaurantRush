@@ -2,7 +2,7 @@ package restaurantrush;
 
 import java.util.List;
 
-/** Owner D. The compulsory base setting; no optional difficulty settings yet. */
+/** The compulsory base setting; no optional difficulty settings yet. */
 public final class GameConfig {
     public static final int MAX_TURNS = 18;
     public static final int TABLE_COUNT = 2;

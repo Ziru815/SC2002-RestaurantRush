@@ -1,6 +1,6 @@
 package restaurantrush;
 
-/** Owner C. May advance a newly placed order, but never a completed/cancelled one. */
+/** May advance a newly placed order, but never a completed/cancelled one. */
 public final class Chef extends Staff {
     public void advance(Order order, int turn) {
         requireAvailable();
