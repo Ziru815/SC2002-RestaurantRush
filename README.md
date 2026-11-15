@@ -72,7 +72,7 @@ Java classes in `src/main/java`, counted with `git diff --name-only` between the
   
 ## Presentation video
 
-The video is included in the submission zip.
+The video is included in the submission zip. (RestaurantRush_Group5.mp4)
 
 | Time | Section | Presenter |
 | --- | --- | --- |
@@ -80,7 +80,7 @@ The video is included in the submission zip.
 | 00:52 | Customer behaviour and meal choice | Ziru |
 | 05:07 | Orders, pricing and Happy Hour | Haoyang |
 | 09:53 | Staff and the full service cycle | Mengyu |
-| 12:45 | Host seating: an occupied table is rejected without using up the Host's task | Mengyu |
+| 12:45 | Invalid choice: seating at an occupied table is refused and the Host keeps their task | Mengyu |
 | 14:58 | Replays, stage tags, change map | Tianren |
 | 16:31 | SOLID in the code | Tianren |
 | 17:34 | Class and sequence diagrams | Tianren |
