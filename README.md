@@ -69,6 +69,21 @@ Java classes in `src/main/java`, counted with `git diff --name-only` between the
 - Added in 2 -> 3: `ComboMeal`, `HappyHourPolicy`, `Host`. Unchanged: `Cashier`, `Chef`, `CriticCustomer`, `CustomerState`, `GameConfig`, `MenuItem`, `OrderStatus`, `RegularCustomer`, `Staff`, `Stage2Arrivals`, `Table`, `VIPCustomer`.
 - Every class added in Stage 2 is unchanged in Stage 3: the new features came in as new classes. Two of the 1 -> 2 changes are small (`Cashier` gained comments only, `Chef` one validation check).
 - The modified files and the reason for each change are listed in the two sections below.
+  
+## Presentation video
+
+The video is included in the submission zip.
+
+| Time | Section | Presenter |
+| --- | --- | --- |
+| 00:00 | Introduction and rules | Tianren |
+| 00:52 | Customer behaviour and meal choice | Ziru |
+| 05:07 | Orders, pricing and Happy Hour | Haoyang |
+| 09:53 | Staff and the full service cycle | Mengyu |
+| 12:45 | Host seating: an occupied table is rejected without using up the Host's task | Mengyu |
+| 14:58 | Replays, stage tags, change map | Tianren |
+| 16:31 | SOLID in the code | Tianren |
+| 17:34 | Class and sequence diagrams | Tianren |
 
 Sequence diagram (Stage 2): [docs/Stage2SequenceDiagram.png](docs/Stage2SequenceDiagram.png). One manager playthrough with `--stage2`, from arrival and VIP order pricing through serving, payment and the final result check.
 
