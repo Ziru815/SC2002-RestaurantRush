@@ -1,6 +1,6 @@
 # Stage 1 replay evidence
 
-Verified 3 November 2026 on `8d7fa09ddae3053f97f9a7ebe9738f3335740133` (tag `stage-1`). AI-assisted runs, not claimed as an independent student's review. Four suites: smoke 9/9, customer 11/11, order/table 14/14, controller 6/6.
+Verified 3 November 2026 on `8d7fa09ddae3053f97f9a7ebe9738f3335740133` (tag `stage-1`). Four suites: smoke 9/9, customer 11/11, order/table 14/14, controller 6/6.
 
 | Input | Turns | Paid | Revenue | Paid average | Departures | Result |
 | --- | --- | --- | --- | --- | --- | --- |

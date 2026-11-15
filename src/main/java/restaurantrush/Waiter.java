@@ -1,6 +1,6 @@
 package restaurantrush;
 
-/** Owner C. Validate everything before mutating; markActed only after success. */
+/** Seats customers, takes orders and serves meals. Only successful actions consume the turn. */
 public final class Waiter extends Staff {
     public void seat(Customer customer, Table table) {
         requireAvailable();

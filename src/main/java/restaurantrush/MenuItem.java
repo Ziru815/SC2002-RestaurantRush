@@ -1,6 +1,6 @@
 package restaurantrush;
 
-/** Owner A. Immutable menu data; money is in cents. This is a concrete class. */
+/** Immutable menu data; money is in cents. This is a concrete class. */
 public class MenuItem {
     private final String name;
     private final int priceCents;

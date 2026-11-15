@@ -7,7 +7,7 @@ import java.util.Locale;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
-/** Owner D. Input/output only: no state transitions, pricing or victory calculation. */
+/** Input/output only: no state transitions, pricing or victory calculation. */
 public final class ConsoleUI {
     private final Scanner input;
     private final PrintStream output;

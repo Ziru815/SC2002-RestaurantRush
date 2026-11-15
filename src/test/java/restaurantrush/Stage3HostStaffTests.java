@@ -1,6 +1,6 @@
 package restaurantrush;
 
-/** Owner C. Stage 3 staff contracts, including Stage 1/2 compatibility. */
+/** Stage 3 staff contracts, including Stage 1/2 compatibility. */
 public final class Stage3HostStaffTests {
     private static int passed;
 

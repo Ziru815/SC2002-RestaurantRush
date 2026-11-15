@@ -6,7 +6,7 @@ import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.IntFunction;
 
-/** Owner D. Runs the 18-turn game; asks the staff and customers to do the work and prints nothing itself. */
+/** Runs the 18-turn game; asks the staff and customers to do the work and prints nothing itself. */
 public final class GameController {
     /** Satisfaction a waiting customer regains at the start of each Happy Hour turn. */
     private static final int HAPPY_HOUR_RECOVERY = 15;

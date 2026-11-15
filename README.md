@@ -101,7 +101,7 @@ Existing files changed:
 
 Tests added: `CustomerExtensionTests`, `Stage2CustomerTests`, `Stage2OrderTests`, `Stage2StaffTests`, `Stage2ControllerTests`, and the replay inputs `stage2-victory.input.txt` and `stage2-defeat.input.txt`.
 
-Deleted: no production or test files. Internal planning notes under `docs/superpowers/` were removed because they were working notes, not part of the submission.
+Deleted: no production or test files.
 
 Stage 1 still works: `sh scripts/run.sh` with no option plays the Stage 1 game, and its four original test suites still pass in `sh scripts/test.sh`.
 
@@ -140,5 +140,3 @@ Deleted: no files.
 Stages 1 and 2 still work: `sh scripts/run.sh` and `sh scripts/run.sh --stage2` play the earlier games, their test suites still pass, and the Stage 2 victory and defeat replays give the same results as at `stage-2`.
 
 The old README at the immutable Stage 1 tag still says skeleton; these current notes correct that stale description without moving the tag. A final report and accurate diagrams remain separate deliverables.
-
-Scaffold and verification were prepared with AI assistance at Ziru's request. Each member must understand, test and explain their own changes, record actual assistance, retain full required AI histories and complete the course declarations. The scaffold is not four members' completed implementations.

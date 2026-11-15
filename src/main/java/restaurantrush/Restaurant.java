@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 
-/** Owner D. Owns state; turn 0 deliberately means the game has not started. */
+/** Owns state; turn 0 deliberately means the game has not started. */
 public final class Restaurant {
     private final List<Table> tables = List.of(new Table(1), new Table(2));
     private final Queue<Customer> waitingQueue = new ArrayDeque<>();

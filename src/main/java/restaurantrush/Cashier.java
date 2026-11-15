@@ -3,7 +3,7 @@ package restaurantrush;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Owner C. D selects the oldest eligible payer; cashier validates and charges once. */
+/** Collects the locked bill once from an eligible customer. */
 public final class Cashier extends Staff {
     private int revenueCents;
     private final List<Integer> paidSatisfactions = new ArrayList<>();

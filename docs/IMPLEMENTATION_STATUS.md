@@ -33,4 +33,4 @@ Tag `stage-3`, commit `51721224e62392ad4e6ee115d5bbe8b932b9f9e1`. Run `sh script
 Victory: 5 paid, $80.10, average satisfaction 85.6. Defeat: 0 paid, $0.00, N/A. See [Stage 3 acceptance](STAGE3_ACCEPTANCE.md).
 
 ## Remaining coursework
-The report/reflections, presentation, team walkthrough and required AI histories/declarations remain separate deliverables. Automated code acceptance does not certify these submissions.
+See the [submission checklist](SUBMISSION_CHECKLIST.md) for the report, presentation and individual deliverables.

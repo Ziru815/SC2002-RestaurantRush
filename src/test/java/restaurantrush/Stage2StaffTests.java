@@ -1,6 +1,6 @@
 package restaurantrush;
 
-/** Owner C. Behavioral employee workflow and invalid-action checks. */
+/** Behavioral employee workflow and invalid-action checks. */
 public final class Stage2StaffTests {
     private static int passed;
 

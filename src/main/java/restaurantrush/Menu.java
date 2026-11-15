@@ -2,7 +2,7 @@ package restaurantrush;
 
 import java.util.List;
 
-/** Owner A. The three base dishes, plus an optional Stage 3 combo. */
+/** The three base dishes, plus an optional Stage 3 combo. */
 public final class Menu {
     private final List<MenuItem> items;
     private final ComboMeal combo;

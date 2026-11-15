@@ -1,6 +1,6 @@
 package restaurantrush;
 
-/** Owner B. Current table/customer association is optional at both ends. */
+/** Current table/customer association is optional at both ends. */
 public final class Table {
     private final int number;
     private Customer occupant;

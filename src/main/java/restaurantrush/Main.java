@@ -2,7 +2,7 @@ package restaurantrush;
 
 import java.util.function.IntFunction;
 
-/** Owner D. Java entry point. No game rules belong here. */
+/** Java entry point. No game rules belong here. */
 public final class Main {
     private static final String USAGE = "Usage: java -cp out/main restaurantrush.Main [--stage2|--stage3] [--check|--help]";
 

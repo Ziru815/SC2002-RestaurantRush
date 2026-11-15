@@ -1,6 +1,6 @@
 package restaurantrush;
 
-/** Owner C. Shared one-action-per-turn guard; never use Object.wait() for game waiting. */
+/** Shared one-action-per-turn guard; never use Object.wait() for game waiting. */
 public abstract class Staff {
     private boolean actedThisTurn;
 

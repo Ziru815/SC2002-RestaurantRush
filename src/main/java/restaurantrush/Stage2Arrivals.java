@@ -1,6 +1,6 @@
 package restaurantrush;
 
-/** Owner D. Setup only; customer-specific rules remain in customer subclasses. */
+/** Setup only; customer-specific rules remain in customer subclasses. */
 public final class Stage2Arrivals {
     private static final int VIP_ID = 2;
     // ID 4 normally chooses Salad, so its Critic Pasta preference is visible.

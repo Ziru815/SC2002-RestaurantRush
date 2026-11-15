@@ -2,7 +2,7 @@ package restaurantrush;
 
 import java.util.Objects;
 
-/** Owner B. One Happy Hour per game, covering its activation turn and the next. */
+/** One Happy Hour per game, covering its activation turn and the next. */
 public final class HappyHourPolicy {
     private static final int DURATION = 2;
     private int activationTurn = -1;

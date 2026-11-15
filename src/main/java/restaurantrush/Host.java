@@ -1,6 +1,6 @@
 package restaurantrush;
 
-/** Owner C. Seats one customer per turn independently of the Waiter. */
+/** Seats one customer per turn independently of the Waiter. */
 public final class Host extends Staff {
     public Host() { }
 
