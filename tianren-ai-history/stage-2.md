@@ -1,6 +1,6 @@
 # AI assistance history: Tianren (Part D), Stage 2
 
-Continues from ../stage-1/chat-01.md. Same Claude Code session, messages from 3 Nov 2026 (after the stage-1 tag) to the stage-2 tag on 7 Nov 2026.
+Continues from stage-1.md. Same Claude Code session, messages from 3 Nov 2026 (after the stage-1 tag) to the stage-2 tag on 7 Nov 2026.
 
 
 ### Me (Tue 03 Nov 2026, 15:32 SGT)
