@@ -69,6 +69,8 @@ Java classes in `src/main/java`, counted with `git diff --name-only` between the
 - Added in 2 -> 3: `ComboMeal`, `HappyHourPolicy`, `Host`. Unchanged: `Cashier`, `Chef`, `CriticCustomer`, `CustomerState`, `GameConfig`, `MenuItem`, `OrderStatus`, `RegularCustomer`, `Staff`, `Stage2Arrivals`, `Table`, `VIPCustomer`.
 - Every class added in Stage 2 is unchanged in Stage 3: the new features came in as new classes. Two of the 1 -> 2 changes are small (`Cashier` gained comments only, `Chef` one validation check).
 - The modified files and the reason for each change are listed in the two sections below.
+
+## AI histories: [Ziru](docs/ai-history/ziru/) · [Haoyang](docs/ai-history/haoyang/) · [Mengyu](docs/ai-history/mengyu/) · [Tianren](docs/ai-history/tianren/)
   
 ## Presentation video
 
